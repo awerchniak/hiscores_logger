@@ -41,6 +41,7 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "ClueScrolls_elite",
     "ClueScrolls_master",
     "LMS_Rank",
+    "SoulWars_Zeal",
     "AbyssalSire",
     "AlchemicalHydra",
     "BarrowsChests",
@@ -69,24 +70,29 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "KrilTsutsaroth",
     "Mimic",
     "Nightmare",
+    "PhosanisNightmare",
     "Obor",
     "Sarachnis",
     "Scorpia",
     "Skotizo",
+    "Tempoross",
     "TheGauntlet",
     "TheCorruptedGauntlet",
     "TheatreofBlood",
+    "TheatreofBlood_HardMode",
     "ThermonuclearSmokeDevil",
     "TzKalZuk",
     "TzTokJad",
     "Venenatis",
-    "Vetion",
+    "Vettion",
     "Vorkath",
     "Wintertodt",
     "Zalcano",
-    "Zulrah"
+    "Zulrah",
 ]
 
-HISCORES_RESPONSE_ROWS: List[str] = HISCORES_RESPONSE_SKILLS + HISCORES_RESPONSE_ACTIVITIES
+HISCORES_RESPONSE_ROWS: List[str] = (
+    HISCORES_RESPONSE_SKILLS + HISCORES_RESPONSE_ACTIVITIES
+)
 HISCORES_RESPONSE_SKILL_COLS: List[str] = ["rank", "level", "experience"]
 HISCORE_RESPONSE_ACTIVITY_COLS: List[str] = ["rank", "count"]
