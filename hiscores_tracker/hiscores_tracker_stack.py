@@ -10,12 +10,13 @@ import os
 import subprocess
 
 
-class HiscoresLoggerStack(Stack):
+class HiscoresTrackerStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         """Construct a HiscoresLoggerStack."""
 
         super().__init__(scope, construct_id, **kwargs)
 
+        # Provision HiScores Table
         table = ddb.Table(
             self,
             "HiScores",
@@ -27,16 +28,16 @@ class HiscoresLoggerStack(Stack):
             removal_policy=RemovalPolicy.DESTROY,
         )
 
-        code_dir = "lambda"
-        function_name = "GetAndParseOSRSMetricsLambda"
-
+        # Provision GetAndParseHiScores Lambda
+        code_dir = "lambda/get_and_parse_hiscores"
+        function_name = "GetAndParseHiScoresLambda"
         with TemporaryDirectory() as layer_output_dir:
             handler = _lambda.Function(
                 self,
                 function_name,
                 runtime=_lambda.Runtime.PYTHON_3_8,
                 code=_lambda.Code.from_asset(code_dir),
-                handler="get_and_parse_metrics.handler",
+                handler="get_and_parse_hiscores.handler",
                 environment={
                     "HISCORES_TABLE_NAME": table.table_name,
                 },
@@ -48,7 +49,6 @@ class HiscoresLoggerStack(Stack):
                     )
                 ],
             )
-
         table.grant_read_write_data(handler)
 
     def create_dependencies_layer(

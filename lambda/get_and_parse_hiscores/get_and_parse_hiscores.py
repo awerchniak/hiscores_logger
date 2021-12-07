@@ -13,7 +13,7 @@ table = ddb.Table(os.environ["HISCORES_TABLE_NAME"])
 
 
 def handler(event, context):
-    """Call HiScores API and parse response."""
+    """Call HiScores API, parse response, and save to Dynamo table."""
 
     player = event["player"]
 
