@@ -1,5 +1,7 @@
 from aws_cdk import (
     aws_dynamodb as ddb,
+    aws_events as events,
+    aws_events_targets as targets,
     aws_lambda as _lambda,
     RemovalPolicy,
     Stack,
@@ -35,6 +37,7 @@ class HiscoresTrackerStack(Stack):
             get_and_parse_handler = _lambda.Function(
                 self,
                 function_name,
+                description="Retrieve, parse, and save HiScores data for a given player.",
                 runtime=_lambda.Runtime.PYTHON_3_8,
                 code=_lambda.Code.from_asset(code_dir),
                 handler="get_and_parse_hiscores.handler",
@@ -51,10 +54,24 @@ class HiscoresTrackerStack(Stack):
             )
         hiscores_table.grant_write_data(get_and_parse_handler)
 
+        # Create Event to trigger GetAndParseHiScores on schedule
+        rule = events.Rule(
+            self,
+            "GetAndParseHiScoresTrigger",
+            description="Trigger GetAndParse Lambda.",
+            enabled=True,
+            schedule=events.Schedule.cron(
+                minute="*/30",  # Trigger every 30 minutes
+                hour="0-2,7-23",  # Trigger between 7am and 2am
+            ),
+        )
+        rule.add_target(targets.LambdaFunction(get_and_parse_handler))
+
         # Provision QueryHiScores Lambda
         query_handler = _lambda.Function(
             self,
             "QueryHiScoresLambda",
+            description="Retrieve data from HiScoresTable for a given player.",
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.from_asset("lambda/read_hiscores_table"),
             handler="read_hiscores_table.handler",

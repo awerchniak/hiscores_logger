@@ -6,7 +6,7 @@ This project helps OSRS players to track and visualize their in-game progress us
 To get started, simply clone the repo. Then:
 ```
 aws configure
-npm install -g aws-cdk
+npm install -g aws-cdk@2.0.0
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
