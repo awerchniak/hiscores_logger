@@ -1,4 +1,5 @@
 from aws_cdk import (
+    aws_apigateway as apigw,
     aws_dynamodb as ddb,
     aws_events as events,
     aws_events_targets as targets,
@@ -80,6 +81,15 @@ class HiscoresTrackerStack(Stack):
             },
         )
         hiscores_table.grant_read_data(query_handler)
+
+        # Expose Rest API for QueryHiScores
+        query_api = apigw.LambdaRestApi(
+            self,
+            "QueryHiScoresData",
+            handler=query_handler,
+            parameters={"player": "str", "startTime": "str", "endTime": "str"},
+        )
+        query_api.root.add_method("GET")
 
     def create_dependencies_layer(
         self, layer_id: str, requirements_file: str, output_dir: str
