@@ -10,6 +10,7 @@ npm install -g aws-cdk
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+cdk bootstrap aws://ACCOUNT-NUMBER/REGION
 cdk deploy
 ```
 

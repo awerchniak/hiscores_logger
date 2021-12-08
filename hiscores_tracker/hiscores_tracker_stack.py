@@ -12,12 +12,12 @@ import subprocess
 
 class HiscoresTrackerStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        """Construct a HiscoresLoggerStack."""
+        """Construct a HiscoresTrackerStack."""
 
         super().__init__(scope, construct_id, **kwargs)
 
         # Provision HiScores Table
-        table = ddb.Table(
+        hiscores_table = ddb.Table(
             self,
             "HiScores",
             partition_key=ddb.Attribute(name="player", type=ddb.AttributeType.STRING),
@@ -32,14 +32,14 @@ class HiscoresTrackerStack(Stack):
         code_dir = "lambda/get_and_parse_hiscores"
         function_name = "GetAndParseHiScoresLambda"
         with TemporaryDirectory() as layer_output_dir:
-            handler = _lambda.Function(
+            get_and_parse_handler = _lambda.Function(
                 self,
                 function_name,
                 runtime=_lambda.Runtime.PYTHON_3_8,
                 code=_lambda.Code.from_asset(code_dir),
                 handler="get_and_parse_hiscores.handler",
                 environment={
-                    "HISCORES_TABLE_NAME": table.table_name,
+                    "HISCORES_TABLE_NAME": hiscores_table.table_name,
                 },
                 layers=[
                     self.create_dependencies_layer(
@@ -49,7 +49,20 @@ class HiscoresTrackerStack(Stack):
                     )
                 ],
             )
-        table.grant_read_write_data(handler)
+        hiscores_table.grant_write_data(get_and_parse_handler)
+
+        # Provision QueryHiScores Lambda
+        query_handler = _lambda.Function(
+            self,
+            "QueryHiScoresLambda",
+            runtime=_lambda.Runtime.PYTHON_3_8,
+            code=_lambda.Code.from_asset("lambda/read_hiscores_table"),
+            handler="read_hiscores_table.handler",
+            environment={
+                "HISCORES_TABLE_NAME": hiscores_table.table_name,
+            },
+        )
+        hiscores_table.grant_read_data(query_handler)
 
     def create_dependencies_layer(
         self, layer_id: str, requirements_file: str, output_dir: str

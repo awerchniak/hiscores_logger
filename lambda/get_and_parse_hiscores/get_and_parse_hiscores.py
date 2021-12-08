@@ -30,4 +30,4 @@ def handler(event, context):
     logger.debug(f"Putting payload {payload}")
     table.put_item(Item=payload)
 
-    return json.dumps(payload)
+    return payload
