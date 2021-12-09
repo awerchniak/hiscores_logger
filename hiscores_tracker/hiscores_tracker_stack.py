@@ -1,9 +1,13 @@
 from aws_cdk import (
     aws_apigateway as apigw,
     aws_dynamodb as ddb,
+    aws_iam as iam,
     aws_events as events,
     aws_events_targets as targets,
     aws_lambda as _lambda,
+    aws_lambda_event_sources as lambda_event_sources,
+    aws_sqs as sqs,
+    Duration,
     RemovalPolicy,
     Stack,
 )
@@ -55,18 +59,38 @@ class HiscoresTrackerStack(Stack):
             )
         hiscores_table.grant_write_data(get_and_parse_handler)
 
-        # Create Event to trigger GetAndParseHiScores on schedule
+        # Provision GetAndParseForPlayer Queue
+        get_and_parse_queue = sqs.Queue(
+            self, "GetAndParseForPlayerQueue", retention_period=Duration.days(1)
+        )
+        get_and_parse_handler.add_event_source(
+            lambda_event_sources.SqsEventSource(get_and_parse_queue, batch_size=1)
+        )
+
+        # Create Orchestrator Lambda
+        orchestrator_handler = _lambda.Function(
+            self,
+            "OrchestratorLambda",
+            description="Read configuration and kick off HiScores tracking.",
+            runtime=_lambda.Runtime.PYTHON_3_8,
+            code=_lambda.Code.from_asset("lambda/orchestrator"),
+            handler="orchestrator.handler",
+            environment={"GET_AND_PARSE_QUEUE_URL": get_and_parse_queue.queue_url},
+        )
+        get_and_parse_queue.grant_send_messages(orchestrator_handler)
+
+        # Create Event to trigger Orchestrator on schedule
         rule = events.Rule(
             self,
-            "GetAndParseHiScoresTrigger",
-            description="Trigger GetAndParse Lambda.",
+            "OrchestratorTrigger",
+            description="Trigger Orchestrator Lambda.",
             enabled=True,
             schedule=events.Schedule.cron(
                 minute="*/30",  # Trigger every 30 minutes
                 hour="0-2,7-23",  # Trigger between 7am and 2am
             ),
         )
-        rule.add_target(targets.LambdaFunction(get_and_parse_handler))
+        rule.add_target(targets.LambdaFunction(orchestrator_handler))
 
         # Provision QueryHiScores Lambda
         query_handler = _lambda.Function(
