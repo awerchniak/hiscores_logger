@@ -28,6 +28,7 @@ def handler(event, context):
             f"Received records for multiple players: {players}. "
             f"Only the first player, '{player}', will be processed."
         )
+    player = player.replace("-", " ")
 
     # retrieve HiScores for `player`
     logger.info(f"Getting HiScores for {player}")

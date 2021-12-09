@@ -11,7 +11,9 @@ logger.setLevel(logging.DEBUG)
 
 def handler(event, context):
     with open("players.txt") as players_file:
-        player_list = [line.strip() for line in players_file.readlines()]
+        player_list = [
+            line.strip().replace(" ", "-") for line in players_file.readlines()
+        ]
 
     # send {"player": player} n times to SQS
     logger.info(f"Sending messages for players: {player_list}")
@@ -26,4 +28,4 @@ def handler(event, context):
         ],
     )
 
-    return player_list
+    return [player.replace("-", " ") for player in player_list]
