@@ -1,7 +1,6 @@
 from aws_cdk import (
     aws_apigateway as apigw,
     aws_dynamodb as ddb,
-    aws_iam as iam,
     aws_events as events,
     aws_events_targets as targets,
     aws_lambda as _lambda,
