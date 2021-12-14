@@ -34,7 +34,7 @@ def _parse_hiscores_response_line(line: str, schema: List[str]) -> dict:
         raise InvalidSchemaError(
             f"Schema '{schema}' is invalid for line '{line}': must be same length."
         )
-    return dict(zip(schema, split_line))
+    return dict(zip(schema, map(int, split_line)))
 
 
 def _parse_skill_line(line: str) -> dict:
