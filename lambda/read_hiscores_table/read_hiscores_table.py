@@ -3,21 +3,14 @@ import json
 import logging
 import os
 from boto3.dynamodb.conditions import Key
-from datetime import datetime
 
-ddb = boto3.resource("dynamodb")
-table = ddb.Table(os.environ["HISCORES_TABLE_NAME"])
+from util import *
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-
-def _valid_datetime(date_string, format="%Y-%m-%d %H:%M:%S"):
-    """Check if a string is a valid datetime."""
-    try:
-        return datetime.strptime(date_string, format)
-    except ValueError:
-        return None
+ddb = boto3.resource("dynamodb")
+table = ddb.Table(os.environ["HISCORES_TABLE_NAME"])
 
 
 def handler(event, context):
@@ -46,37 +39,69 @@ def handler(event, context):
         return {"statusCode": 400, "body": "API requires 'player' param."}
     player = params["player"]
 
-    if "startTime" not in params or not _valid_datetime(params["startTime"]):
+    if "startTime" not in params or not any(
+        [
+            valid_datetime(params["startTime"], TIMESTAMP_FMT),
+            valid_datetime(params["startTime"], DATE_FMT),
+        ]
+    ):
         return {
             "statusCode": 400,
             "body": json.dumps(
                 {
                     "status": 400,
-                    "body": "API requires 'startTime' param with shape 'YYYY-mm-dd HH:MM:SS'",
+                    "body": "API requires 'startTime' param with shape 'YYYY-mm-dd [HH:MM:SS]'",
                 }
             ),
         }
     start_time = params["startTime"]
 
-    if "endTime" not in params or not _valid_datetime(params["endTime"]):
+    if "endTime" not in params or not any(
+        [
+            valid_datetime(params["endTime"], TIMESTAMP_FMT),
+            valid_datetime(params["endTime"], DATE_FMT),
+        ]
+    ):
         return {
             "statusCode": 400,
             "body": json.dumps(
                 {
                     "status": 400,
-                    "body": "API requires 'endTime' param with shape 'YYYY-mm-dd HH:MM:SS'",
+                    "body": "API requires 'endTime' param with shape 'YYYY-mm-dd [HH:MM:SS]'",
                 }
             ),
         }
     end_time = params["endTime"]
 
+    try:
+        aggregation_level = infer_aggregation_level(start_time, end_time)
+        query_boundaries = get_query_boundaries(start_time, end_time, aggregation_level)
+    except TypeError:
+        return {
+            "statusCode": 400,
+            "body": json.dumps(
+                {
+                    "status": 400,
+                    "body": "'startTime' and 'endTime' parameter formats must match.",
+                }
+            ),
+        }
+
     logger.info(
         f"Retrieving HiScores data for player '{player}' between "
-        f"{start_time} and {end_time}"
+        f"{query_boundaries[0]} and {query_boundaries[1]}"
     )
     response = table.query(
         KeyConditionExpression=Key("player").eq(player)
-        & Key("timestamp").between(start_time, end_time)
+        & Key("timestamp").between(*query_boundaries)
     )
-    logger.info(f"Received data: {response['Items']}")
-    return {"statusCode": 200, "body": json.dumps(response["Items"])}
+    items = response["Items"]
+    logger.info(f"Received items: {items}")
+
+    linted_items = lint_items(items, aggregation_level)
+    logger.info(f"Linted items: {linted_items}")
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps(linted_items, cls=CustomEncoder),
+    }
