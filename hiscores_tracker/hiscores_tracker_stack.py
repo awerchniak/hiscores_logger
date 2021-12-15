@@ -22,7 +22,7 @@ class HiscoresTrackerStack(Stack):
 
         super().__init__(scope, construct_id, **kwargs)
 
-        # Provision HiScores Table
+        # Provision HiScores Table and aggregation lambda
         hiscores_table = ddb.Table(
             self,
             "HiScores",
@@ -32,6 +32,27 @@ class HiscoresTrackerStack(Stack):
             read_capacity=5,
             write_capacity=5,
             removal_policy=RemovalPolicy.DESTROY,
+            stream=ddb.StreamViewType.NEW_IMAGE,
+        )
+        aggregation_lambda = _lambda.Function(
+            self,
+            "DailyAggregatorLambda",
+            handler="aggregator.handler",
+            code=_lambda.Code.from_asset("lambda/aggregator"),
+            runtime=_lambda.Runtime.PYTHON_3_8,
+            environment={
+                "HISCORES_TABLE_NAME": hiscores_table.table_name,
+            },
+            retry_attempts=0,
+        )
+        hiscores_table.grant_read_write_data(aggregation_lambda)
+        aggregation_lambda.add_event_source(
+            lambda_event_sources.DynamoEventSource(
+                hiscores_table,
+                starting_position=_lambda.StartingPosition.TRIM_HORIZON,
+                batch_size=1,
+                retry_attempts=0,
+            )
         )
 
         # Provision GetAndParseHiScores Lambda

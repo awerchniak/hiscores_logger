@@ -94,5 +94,9 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
 HISCORES_RESPONSE_ROWS: List[str] = (
     HISCORES_RESPONSE_SKILLS + HISCORES_RESPONSE_ACTIVITIES
 )
-HISCORES_RESPONSE_SKILL_COLS: List[str] = ["rank", "level", "experience"]
-HISCORE_RESPONSE_ACTIVITY_COLS: List[str] = ["rank", "count"]
+HISCORES_RESPONSE_SKILL_COLS: List[str] = ["rnk", "lvl", "xp"]
+HISCORE_RESPONSE_ACTIVITY_COLS: List[str] = ["rnk", "kc"]
+"""
+Unfortunately, `RANK`, `LEVEL`, and `COUNT` are all reserved words in DynamoDB:
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html
+"""
