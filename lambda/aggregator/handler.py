@@ -2,7 +2,7 @@ import boto3
 import logging
 import os
 
-from util import (
+from lib.dynamo_aggregator.util import (
     aggregate_hiscores_rows,
     lint_query_response,
     parse_image,

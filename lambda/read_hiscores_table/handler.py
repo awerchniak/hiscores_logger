@@ -4,7 +4,15 @@ import logging
 import os
 from boto3.dynamodb.conditions import Key
 
-from util import *
+from lib.aggregation_queryer.util import (
+    CustomEncoder,
+    DATE_FMT,
+    TIMESTAMP_FMT,
+    get_query_boundaries,
+    infer_aggregation_level,
+    lint_items,
+    valid_datetime,
+)
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

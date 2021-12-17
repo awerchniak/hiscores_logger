@@ -5,7 +5,12 @@ import requests
 from urllib.parse import urlparse
 from typing import List
 
-import constants
+from .constants import (
+    HISCORE_RESPONSE_ACTIVITY_COLS,
+    HISCORES_RESPONSE_SKILL_COLS,
+    HISCORES_RESPONSE_SKILLS,
+    HISCORES_RESPONSE_ACTIVITIES,
+)
 
 logger = logging.getLogger()
 
@@ -39,12 +44,12 @@ def _parse_hiscores_response_line(line: str, schema: List[str]) -> dict:
 
 def _parse_skill_line(line: str) -> dict:
     """Parse a CSV skill line from a hiscores response."""
-    return _parse_hiscores_response_line(line, constants.HISCORES_RESPONSE_SKILL_COLS)
+    return _parse_hiscores_response_line(line, HISCORES_RESPONSE_SKILL_COLS)
 
 
 def _parse_activity_line(line: str) -> dict:
     """Parse a CSV activity line from a hiscores response."""
-    return _parse_hiscores_response_line(line, constants.HISCORE_RESPONSE_ACTIVITY_COLS)
+    return _parse_hiscores_response_line(line, HISCORE_RESPONSE_ACTIVITY_COLS)
 
 
 def request_hiscores(
@@ -87,22 +92,22 @@ def sanitize_hiscores_stats(text: str) -> dict:
     lines = text.strip().split("\n")
 
     # skills are returned first
-    skill_lines = lines[: len(constants.HISCORES_RESPONSE_SKILLS)]
+    skill_lines = lines[: len(HISCORES_RESPONSE_SKILLS)]
     # parse and label elements
     try:
         skill_dict = dict(
-            zip(constants.HISCORES_RESPONSE_SKILLS, map(_parse_skill_line, skill_lines))
+            zip(HISCORES_RESPONSE_SKILLS, map(_parse_skill_line, skill_lines))
         )
     except InvalidSchemaError as e:
         raise ValueError("Expected skill line of API result is malformatted.") from e
 
     # activities are returned second
-    activity_lines = lines[len(constants.HISCORES_RESPONSE_SKILLS) :]
+    activity_lines = lines[len(HISCORES_RESPONSE_SKILLS) :]
     # parse and label elements
     try:
         activity_dict = dict(
             zip(
-                constants.HISCORES_RESPONSE_ACTIVITIES,
+                HISCORES_RESPONSE_ACTIVITIES,
                 map(_parse_activity_line, activity_lines),
             )
         )

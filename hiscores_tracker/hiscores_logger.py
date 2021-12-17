@@ -30,7 +30,7 @@ class HiScoresLogger(Construct):
                 description="Retrieve, parse, and save HiScores data for a given player.",
                 runtime=_lambda.Runtime.PYTHON_3_8,
                 code=_lambda.Code.from_asset(code_dir),
-                handler="get_and_parse_hiscores.handler",
+                handler="handler.handler",
                 environment={
                     "HISCORES_TABLE_NAME": table.table_name,
                 },
@@ -59,7 +59,7 @@ class HiScoresLogger(Construct):
             description="Read configuration and kick off HiScores tracking.",
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.from_asset("lambda/orchestrator"),
-            handler="orchestrator.handler",
+            handler="handler.handler",
             environment={"GET_AND_PARSE_QUEUE_URL": get_and_parse_queue.queue_url},
         )
         get_and_parse_queue.grant_send_messages(orchestrator_handler)

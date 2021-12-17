@@ -3,7 +3,7 @@ import json
 import logging
 import os
 
-import rs_api
+from lib.hiscores import rs_api
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)

@@ -48,7 +48,7 @@ class AggregatingTimeSeriesTable(Construct):
         aggregator = _lambda.Function(
             self,
             "DailyAggregatorLambda",
-            handler="aggregator.handler",
+            handler="handler.handler",
             code=_lambda.Code.from_asset("lambda/aggregator"),
             runtime=_lambda.Runtime.PYTHON_3_8,
             environment={
@@ -75,7 +75,7 @@ class AggregatingTimeSeriesTable(Construct):
             description="Retrieve data from HiScoresTable for a given player.",
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.from_asset("lambda/read_hiscores_table"),
-            handler="read_hiscores_table.handler",
+            handler="handler.handler",
             environment={
                 "HISCORES_TABLE_NAME": self._table.table_name,
             },
