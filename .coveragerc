@@ -2,3 +2,6 @@
 omit = 
     *tst*
     lambda/*/handler.py
+
+[report]
+fail_under = 90
