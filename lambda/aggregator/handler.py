@@ -53,7 +53,7 @@ def handler(event, context):
         resp = table.get_item(Key=key)
         logger.info(f"Received response {resp}")
 
-        linted_resp = lint_query_response(resp["Item"]) if "Item" in resp else None
+        linted_resp = lint_query_response(resp.get("Item"))
         logger.info(f"Linted response: {linted_resp}")
 
         new_item = aggregate_hiscores_rows(linted_resp, unrolled_new_image)

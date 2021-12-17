@@ -84,12 +84,60 @@ def _image_str(_map):
 
 
 def parse_image(image):
-    """Parse player ID and timestamp from a DDB event image."""
+    """Parse player ID and timestamp from a DDB event image.
+
+    Examples:
+    >>> img = {"player": {"S": "ElderPlinius"}, "timestamp": {"S": "2021-12-15 18:19:00"}}
+    >>> parse_image(img)
+    ('ElderPlinius', '2021-12-15 18:19:00')
+
+    """
     return _image_str(image["player"]), _image_str(image["timestamp"])
 
 
 def unroll_image(image):
-    """Convert DDBEvent to Item schema."""
+    """Convert DDBEvent to Item schema.
+
+    Examples:
+    >>> img = {
+    ...     "skills": {
+    ...         "M": {
+    ...             "Overall": {
+    ...                 "M": {
+    ...                     "lvl": {"N": "1000"},
+    ...                     "xp": {"N": "1000000"},
+    ...                     "rnk": {"N": "1000000"},
+    ...                 },
+    ...             },
+    ...         },
+    ...     },
+    ...     "activities": {
+    ...         "M": {
+    ...             "TheatreofBlood": {
+    ...                 "M": {
+    ...                     "kc": {"N": "-1"},
+    ...                     "rnk": {"N": "-1"},
+    ...                 }
+    ...             }
+    ...         }
+    ...     },
+    ...     "player": {"S": "PlayerName"},
+    ...     "timestamp": {"S": "2021-12-17 20:41:59"},
+    ... }
+    >>> assert unroll_image(img) == {
+    ...     'skills': {
+    ...         'Overall': {'lvl': 1000, 'xp': 1000000, 'rnk': 1000000}
+    ...     },
+    ...     'activities': {
+    ...         'TheatreofBlood': {'kc': -1, 'rnk': -1}
+    ...     },
+    ...     'player': 'PlayerName',
+    ...     'timestamp': '2021-12-17 20:41:59'
+    ... }
+    >>> unroll_image({"hi": "hello"})
+    {'hi': 'hello'}
+
+    """
     unrolled = dict()
     for k, v in image.items():
         if isinstance(v, dict):
@@ -117,6 +165,10 @@ def cast_nested_dict(d, original_type, new_type):
     Returns:
         dict
 
+    Examples:
+    >>> cast_nested_dict({"hello": 0.70, "hey": {"sup": 1}}, float, int)
+    {'hello': 0, 'hey': {'sup': 1}}
+
     """
     result = dict()
     for k, v in d.items():
@@ -132,5 +184,43 @@ def cast_nested_dict(d, original_type, new_type):
 
 
 def lint_query_response(item):
-    """Convert query response to nested dict of ints."""
-    return cast_nested_dict(d=item, original_type=Decimal, new_type=int)
+    """Convert query response to nested dict of ints.
+
+    Examples:
+    >>> lint_query_response(None)
+    >>> result = lint_query_response(
+    ...     {
+    ...         "divisor": Decimal("1"),
+    ...         "activities": {
+    ...             "TheatreofBlood": {
+    ...                 "kc": Decimal("-1"),
+    ...                 "rnk": Decimal("-1"),
+    ...             },
+    ...         },
+    ...         "skills": {
+    ...             "Overall": {
+    ...                 "lvl": Decimal("1000"),
+    ...                 "xp": Decimal("1000000"),
+    ...                 "rnk": Decimal("1000000"),
+    ...             },
+    ...         },
+    ...         "player": "PlayerName",
+    ...         "timestamp": "Daily#2021-12-17",
+    ...     },
+    ... )
+    >>> assert result == {
+    ...     'divisor': 1,
+    ...     'activities': {
+    ...         'TheatreofBlood': {'kc': -1, 'rnk': -1}
+    ...     }, 'skills': {
+    ...         'Overall': {'lvl': 1000, 'xp': 1000000, 'rnk': 1000000}
+    ...     },
+    ...     'player': 'PlayerName',
+    ...     'timestamp': 'Daily#2021-12-17'
+    ... }
+
+    """
+    if item is None:
+        return item
+    else:
+        return cast_nested_dict(d=item, original_type=Decimal, new_type=int)
