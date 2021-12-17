@@ -1,0 +1,4 @@
+[run]
+omit = 
+    *tst*
+    lambda/*/handler.py
