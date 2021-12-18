@@ -4,7 +4,7 @@ set -exo pipefail
 NO_TESTS_FOUND=5
 
 >&2 echo "Running unit tests for constructs..."
-pytest tests --cov=hiscores_tracker --cov-report=html:tests/.coverage
+pytest tests --cov=hiscores_tracker --cov-report=html:hiscores_tracker/.coverage
 
 >&2 echo "Running unit tests for lambda handler libs..."
 for dir in $(ls -d lambda/*)

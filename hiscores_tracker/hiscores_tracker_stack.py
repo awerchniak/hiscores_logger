@@ -3,7 +3,7 @@ from aws_cdk import (
 )
 from constructs import Construct
 
-from .atst import AggregatingTimeSeriesTable
+from .agg_time_series_table import AggregatingTimeSeriesTable
 from .hiscores_logger import HiScoresLogger
 
 
