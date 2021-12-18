@@ -4,7 +4,7 @@ import logging
 import os
 from boto3.dynamodb.conditions import Key
 
-from lib.aggregation_queryer.util import (
+from read_hiscores_table.lib.aggregation_queryer.util import (
     CustomEncoder,
     DATE_FMT,
     TIMESTAMP_FMT,

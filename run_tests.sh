@@ -16,22 +16,13 @@ cleanup() {
 trap 'cleanup' ERR
 
 
-cyan_error "Running unit tests for constructs..."
-(set -x; pytest tests \
+cyan_error "Running unit tests..."
+(set -x; pytest tests lambda \
+    --doctest-modules \
+    --ignore-glob=lambda/*/handler.py \
     --cov=hiscores_tracker \
-    --cov-config=tests/.coveragerc \
-    --cov-report=html:tests/unit/.coverage)
-
-cyan_error "Running unit tests for lambda handler libs..."
-for dir in $(ls -d lambda/*)
-do
-    cyan_error "Testing $dir..."
-    (set -x; pytest $dir \
-        --doctest-modules \
-        --ignore=$dir/handler.py \
-        --cov=$dir \
-        --cov-config=lambda/.coveragerc \
-        --cov-report=html:$dir/.coverage)
-done
+    --cov=lambda \
+    --cov-report=html:.coverage_html
+)
 
 cleanup
