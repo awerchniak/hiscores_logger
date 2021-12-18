@@ -1,21 +1,38 @@
 #!/bin/bash
-set -exo pipefail
+set -eo pipefail
 
-NO_TESTS_FOUND=5
+CYAN='\033[1;36m'
+NC='\033[0m'
 
->&2 echo "Running unit tests for constructs..."
-pytest tests --cov=hiscores_tracker --cov-report=html:hiscores_tracker/.coverage
+cyan_error() {
+    >&2 echo -e "${CYAN}${1}${NC}"
+}
 
->&2 echo "Running unit tests for lambda handler libs..."
+
+cleanup() {
+    set +x; cyan_error "Cleaning pycaches..."
+    set -x; py3clean hiscores_tracker lambda tests
+}
+trap 'cleanup' ERR
+
+
+cyan_error "Running unit tests for constructs and lambda handlers..."
+(set -x; pytest tests \
+    --cov=hiscores_tracker \
+    --cov=lambda \
+    --cov-config=tests/.coveragerc \
+    --cov-report=html:tests/unit/.coverage)
+
+cyan_error "Running unit tests for lambda handler libs..."
 for dir in $(ls -d lambda/*)
 do
->&2 echo "Testing $dir..."
-pytest $dir \
-    --ignore=$dir/handler.py \
-    --cov=$dir \
-    --cov-report=html:$dir/.coverage \
-    || NO_TESTS_FOUND=$?
+    cyan_error "Testing $dir..."
+    (set -x; pytest $dir \
+        --doctest-modules \
+        --ignore=$dir/handler.py \
+        --cov=$dir \
+        --cov-config=lambda/.coveragerc \
+        --cov-report=html:$dir/.coverage)
 done
 
->&2 echo "Cleaning pycaches..."
-py3clean hiscores_tracker lambda tests
+cleanup
