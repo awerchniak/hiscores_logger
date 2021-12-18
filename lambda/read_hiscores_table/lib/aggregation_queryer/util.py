@@ -70,7 +70,14 @@ def get_query_boundaries(start_time, end_time, aggregation_level=AggregationLeve
 
 
 def normalize_nested_dict(d, denom):
-    """Normalize values in a nested dict by a given denominator."""
+    """Normalize values in a nested dict by a given denominator.
+
+    Examples:
+    >>> d = {"one": 1.0, "two": {"three": 3.0, "four": 4.0}}
+    >>> normalize_nested_dict(d, 2.0)
+    {'one': 0.5, 'two': {'three': 1.5, 'four': 2.0}}
+
+    """
     result = dict()
     for key, value in d.items():
         if isinstance(value, dict):
