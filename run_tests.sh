@@ -16,10 +16,9 @@ cleanup() {
 trap 'cleanup' ERR
 
 
-cyan_error "Running unit tests for constructs and lambda handlers..."
+cyan_error "Running unit tests for constructs..."
 (set -x; pytest tests \
     --cov=hiscores_tracker \
-    --cov=lambda \
     --cov-config=tests/.coveragerc \
     --cov-report=html:tests/unit/.coverage)
 
