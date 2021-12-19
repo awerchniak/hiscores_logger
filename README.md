@@ -13,7 +13,8 @@ This project helps OSRS players to track and visualize their in-game progress us
 
 1. [Create a free-tier AWS account](https://aws.amazon.com/free) (if you don't already have one)
 1. [Install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-1. Install the CDK CLI: `npm install -g aws-cdk@2.0.0`
+2. [Configure the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+3. Install the CDK CLI: `npm install -g aws-cdk@2.0.0`
 
 ## Clone the repo
 
