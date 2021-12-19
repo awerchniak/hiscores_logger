@@ -13,31 +13,34 @@ import os
 import subprocess
 from tempfile import TemporaryDirectory
 
+from hiscores_tracker.util import package_lambda
+
 
 class HiScoresLogger(Construct):
     """Automatically log OldSchoolRuneScape HiScores metrics to Dynamo table."""
 
-    def __init__(self, scope: Construct, id: str, table: ddb.ITable, **kwargs):
+    def __init__(
+        self, scope: Construct, id: str, table: ddb.ITable, enabled=True, **kwargs
+    ):
         super().__init__(scope, id, **kwargs)
 
         # Provision GetAndParseHiScores Lambda
-        code_dir = "lambda/get_and_parse_hiscores"
-        function_name = "GetAndParseHiScoresLambda"
+        handler_name = "get_and_parse_hiscores"
         with TemporaryDirectory() as layer_output_dir:
-            get_and_parse_handler = _lambda.Function(
-                self,
-                function_name,
+            get_and_parse_handler = package_lambda(
+                scope=self,
+                handler_name="get_and_parse_hiscores",
+                function_name="GetAndParseHiScoresLambda",
                 description="Retrieve, parse, and save HiScores data for a given player.",
-                runtime=_lambda.Runtime.PYTHON_3_8,
-                code=_lambda.Code.from_asset(code_dir),
-                handler="handler.handler",
                 environment={
                     "HISCORES_TABLE_NAME": table.table_name,
                 },
                 layers=[
                     self.create_dependencies_layer(
-                        layer_id="python-requests-dependencies",
-                        requirements_file=os.path.join(code_dir, "requirements.txt"),
+                        layer_id="get-and-parse-dependencies",
+                        requirements_file=os.path.join(
+                            "lambda", handler_name, "requirements.txt"
+                        ),
                         output_dir=layer_output_dir,
                     )
                 ],
@@ -53,13 +56,12 @@ class HiScoresLogger(Construct):
         )
 
         # Create Orchestrator Lambda
-        orchestrator_handler = _lambda.Function(
-            self,
-            "OrchestratorLambda",
+        handler_name = "orchestrator"
+        orchestrator_handler = package_lambda(
+            scope=self,
+            handler_name="orchestrator",
+            function_name="OrchestratorLambda",
             description="Read configuration and kick off HiScores tracking.",
-            runtime=_lambda.Runtime.PYTHON_3_8,
-            code=_lambda.Code.from_asset("lambda/orchestrator"),
-            handler="handler.handler",
             environment={"GET_AND_PARSE_QUEUE_URL": get_and_parse_queue.queue_url},
         )
         get_and_parse_queue.grant_send_messages(orchestrator_handler)
@@ -69,7 +71,7 @@ class HiScoresLogger(Construct):
             self,
             "OrchestratorTrigger",
             description="Trigger Orchestrator Lambda.",
-            enabled=True,
+            enabled=enabled,
             schedule=events.Schedule.cron(
                 minute="*/30",  # Trigger every 30 minutes
                 hour="0-2,7-23",  # Trigger between 7am and 2am

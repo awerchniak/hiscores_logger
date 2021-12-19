@@ -10,7 +10,7 @@ logger.setLevel(logging.DEBUG)
 
 
 def handler(event, context):
-    with open("players.txt") as players_file:
+    with open("orchestrator/players.txt") as players_file:
         player_list = [
             line.strip().replace(" ", "-") for line in players_file.readlines()
         ]

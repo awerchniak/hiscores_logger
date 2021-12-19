@@ -7,6 +7,8 @@ from aws_cdk import (
     RemovalPolicy,
 )
 
+from .util import package_lambda
+
 
 class AggregatingTimeSeriesTable(Construct):
     """DynamoDB timeseries table with automatic aggregation.
@@ -45,12 +47,11 @@ class AggregatingTimeSeriesTable(Construct):
         )
 
         # Provision aggregator Lambda and grant write access
-        aggregator = _lambda.Function(
-            self,
-            "DailyAggregatorLambda",
-            handler="handler.handler",
-            code=_lambda.Code.from_asset("lambda/aggregator"),
-            runtime=_lambda.Runtime.PYTHON_3_8,
+        aggregator = package_lambda(
+            scope=self,
+            handler_name="aggregator",
+            function_name="DailyAggregatorLambda",
+            description="Aggregate write events into daily rows.",
             environment={
                 "HISCORES_TABLE_NAME": self._table.table_name,
             },
@@ -69,13 +70,11 @@ class AggregatingTimeSeriesTable(Construct):
         )
 
         # Provision queryer Lambda and grant read access
-        queryer = _lambda.Function(
-            self,
-            "QueryHiScoresLambda",
+        queryer = package_lambda(
+            scope=self,
+            handler_name="read_hiscores_table",
+            function_name="QueryHiScoresLambda",
             description="Retrieve data from HiScoresTable for a given player.",
-            runtime=_lambda.Runtime.PYTHON_3_8,
-            code=_lambda.Code.from_asset("lambda/read_hiscores_table"),
-            handler="handler.handler",
             environment={
                 "HISCORES_TABLE_NAME": self._table.table_name,
             },
