@@ -4,6 +4,7 @@ set -eo pipefail
 CYAN='\033[1;36m'
 NC='\033[0m'
 
+
 cyan_error() {
     >&2 echo -e "${CYAN}${1}${NC}"
 }
@@ -24,5 +25,8 @@ cyan_error "Running unit tests..."
     --cov=lambda \
     --cov-report=html:.coverage_html
 )
+
+cyan_error "Enforcing black..."
+(set -x; black hiscores_tracker lambda tests)
 
 cleanup
