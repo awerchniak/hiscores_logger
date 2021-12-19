@@ -1,13 +1,13 @@
-import boto3
 import json
 import logging
 import os
-from boto3.dynamodb.conditions import Key
 
+import boto3
+from boto3.dynamodb.conditions import Key
 from read_hiscores_table.lib.aggregation_queryer.util import (
-    CustomEncoder,
     DATE_FMT,
     TIMESTAMP_FMT,
+    CustomEncoder,
     get_query_boundaries,
     infer_aggregation_level,
     lint_items,

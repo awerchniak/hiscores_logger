@@ -1,17 +1,15 @@
-from constructs import Construct
-from aws_cdk import (
-    aws_dynamodb as ddb,
-    aws_events as events,
-    aws_events_targets as targets,
-    aws_lambda as _lambda,
-    aws_lambda_event_sources as lambda_event_sources,
-    aws_sqs as sqs,
-    Duration,
-)
-
 import os
 import subprocess
 from tempfile import TemporaryDirectory
+
+from aws_cdk import Duration
+from aws_cdk import aws_dynamodb as ddb
+from aws_cdk import aws_events as events
+from aws_cdk import aws_events_targets as targets
+from aws_cdk import aws_lambda as _lambda
+from aws_cdk import aws_lambda_event_sources as lambda_event_sources
+from aws_cdk import aws_sqs as sqs
+from constructs import Construct
 
 from hiscores_tracker.util import package_lambda
 

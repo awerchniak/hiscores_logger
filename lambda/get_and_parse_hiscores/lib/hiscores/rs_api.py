@@ -1,15 +1,16 @@
 """Module for interacting with OSRS APIs."""
-from datetime import datetime, timedelta
 import logging
-import requests
-from urllib.parse import urlparse
+from datetime import datetime, timedelta
 from typing import List
+from urllib.parse import urlparse
+
+import requests
 
 from .constants import (
     HISCORE_RESPONSE_ACTIVITY_COLS,
+    HISCORES_RESPONSE_ACTIVITIES,
     HISCORES_RESPONSE_SKILL_COLS,
     HISCORES_RESPONSE_SKILLS,
-    HISCORES_RESPONSE_ACTIVITIES,
 )
 
 logger = logging.getLogger()

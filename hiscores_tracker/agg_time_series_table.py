@@ -1,11 +1,9 @@
+from aws_cdk import RemovalPolicy
+from aws_cdk import aws_apigateway as apigw
+from aws_cdk import aws_dynamodb as ddb
+from aws_cdk import aws_lambda as _lambda
+from aws_cdk import aws_lambda_event_sources as lambda_event_sources
 from constructs import Construct
-from aws_cdk import (
-    aws_apigateway as apigw,
-    aws_dynamodb as ddb,
-    aws_lambda as _lambda,
-    aws_lambda_event_sources as lambda_event_sources,
-    RemovalPolicy,
-)
 
 from .util import package_lambda
 

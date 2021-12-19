@@ -28,6 +28,8 @@ cyan_error "Running unit tests..."
 
 cyan_error "Enforcing formatters..."
 (set -x; black hiscores_tracker lambda tests)
+(set -x; isort hiscores_tracker lambda tests \
+    --profile=black)
 
 cyan_error "Checking linters..."
 (set -x; flake8 hiscores_tracker lambda tests \

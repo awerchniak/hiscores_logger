@@ -1,7 +1,8 @@
-import boto3
 import json
-import os
 import logging
+import os
+
+import boto3
 
 sqs = boto3.client("sqs")
 

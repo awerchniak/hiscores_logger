@@ -1,7 +1,7 @@
 import decimal
 import json
-import pytest
 
+import pytest
 import read_hiscores_table.lib.aggregation_queryer.util as util
 
 

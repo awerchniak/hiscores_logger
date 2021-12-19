@@ -1,6 +1,4 @@
-from aws_cdk import (
-    Stack,
-)
+from aws_cdk import Stack
 from constructs import Construct
 
 from .agg_time_series_table import AggregatingTimeSeriesTable

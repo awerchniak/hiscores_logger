@@ -1,8 +1,8 @@
-import boto3
 import json
 import logging
 import os
 
+import boto3
 from get_and_parse_hiscores.lib.hiscores import rs_api
 
 logger = logging.getLogger()

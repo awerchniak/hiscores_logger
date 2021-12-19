@@ -1,9 +1,9 @@
-from aws_cdk import aws_lambda as _lambda
 import os
 import shutil
-
 from contextlib import contextmanager
 from tempfile import TemporaryDirectory
+
+from aws_cdk import aws_lambda as _lambda
 
 
 @contextmanager

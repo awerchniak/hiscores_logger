@@ -1,6 +1,5 @@
-import pytest
-
 import aggregator.lib.dynamo_aggregator.util as util
+import pytest
 
 
 def test_aggregate_dictlikes():

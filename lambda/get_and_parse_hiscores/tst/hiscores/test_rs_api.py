@@ -1,11 +1,10 @@
 import datetime
 import inspect
-import pytest
-import requests
-
 from unittest import mock
 
 import get_and_parse_hiscores.lib.hiscores.rs_api as rs_api
+import pytest
+import requests
 
 
 class MockRequestsGet(object):

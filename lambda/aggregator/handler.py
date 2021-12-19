@@ -1,7 +1,7 @@
-import boto3
 import logging
 import os
 
+import boto3
 from aggregator.lib.dynamo_aggregator.util import (
     aggregate_hiscores_rows,
     lint_query_response,
