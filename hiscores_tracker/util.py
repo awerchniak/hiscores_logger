@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from tempfile import TemporaryDirectory
 
 from aws_cdk import aws_lambda as _lambda
+from aws_cdk.aws_lambda_python import PythonFunction
 
 
 @contextmanager
@@ -21,20 +22,17 @@ def package_lambda(
     function_name,
     description,
     environment=None,
-    layers=None,
     retry_attempts=None,
 ):
     """Package handler source and provision Lambda function."""
     original_code_dir = os.path.join("lambda", handler_name)
     with wraps_code_dir(code_dir=original_code_dir) as code_dir:
-        return _lambda.Function(
+        return PythonFunction(
             scope,
             function_name,
-            description=description,
+            entry=os.path.join(code_dir, "handler.py"),
+            descrtion=description,
             runtime=_lambda.Runtime.PYTHON_3_8,
-            code=_lambda.Code.from_asset(code_dir),
-            handler=f"{handler_name}.handler.handler",
             environment=environment,
-            layers=layers,
             retry_attempts=retry_attempts,
         )

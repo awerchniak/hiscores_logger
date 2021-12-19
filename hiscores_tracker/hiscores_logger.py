@@ -1,7 +1,3 @@
-import os
-import subprocess
-from tempfile import TemporaryDirectory
-
 from aws_cdk import Duration
 from aws_cdk import aws_dynamodb as ddb
 from aws_cdk import aws_events as events
@@ -24,25 +20,15 @@ class HiScoresLogger(Construct):
 
         # Provision GetAndParseHiScores Lambda
         handler_name = "get_and_parse_hiscores"
-        with TemporaryDirectory() as layer_output_dir:
-            get_and_parse_handler = package_lambda(
-                scope=self,
-                handler_name="get_and_parse_hiscores",
-                function_name="GetAndParseHiScoresLambda",
-                description="Retrieve, parse, and save HiScores data for a player.",
-                environment={
-                    "HISCORES_TABLE_NAME": table.table_name,
-                },
-                layers=[
-                    self.create_dependencies_layer(
-                        layer_id="get-and-parse-dependencies",
-                        requirements_file=os.path.join(
-                            "lambda", handler_name, "requirements.txt"
-                        ),
-                        output_dir=layer_output_dir,
-                    )
-                ],
-            )
+        get_and_parse_handler = package_lambda(
+            scope=self,
+            handler_name="get_and_parse_hiscores",
+            function_name="GetAndParseHiscoresLambda",
+            description="Retrieve, parse, and save HiScores data for a player.",
+            environment={
+                "HISCORES_TABLE_NAME": table.table_name,
+            },
+        )
         table.grant_write_data(get_and_parse_handler)
 
         # Provision GetAndParseForPlayer Queue
@@ -54,7 +40,6 @@ class HiScoresLogger(Construct):
         )
 
         # Create Orchestrator Lambda
-        handler_name = "orchestrator"
         orchestrator_handler = package_lambda(
             scope=self,
             handler_name="orchestrator",
@@ -76,17 +61,3 @@ class HiScoresLogger(Construct):
             ),
         )
         rule.add_target(targets.LambdaFunction(orchestrator_handler))
-
-    def create_dependencies_layer(
-        self, layer_id: str, requirements_file: str, output_dir: str
-    ) -> _lambda.LayerVersion:
-        """Create LambdaLayer with required dependencies.
-
-        Citation: https://github.com/esteban-uo/aws-cdk-python-application-dependencies
-        """
-
-        subprocess.check_call(
-            f"pip install -r {requirements_file} -t {output_dir}/python".split()
-        )
-        layer_code = _lambda.Code.from_asset(output_dir)
-        return _lambda.LayerVersion(self, layer_id, code=layer_code)
