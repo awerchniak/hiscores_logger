@@ -31,7 +31,7 @@ class HiScoresLogger(Construct):
                 scope=self,
                 handler_name="get_and_parse_hiscores",
                 function_name="GetAndParseHiScoresLambda",
-                description="Retrieve, parse, and save HiScores data for a given player.",
+                description="Retrieve, parse, and save HiScores data for a player.",
                 environment={
                     "HISCORES_TABLE_NAME": table.table_name,
                 },

@@ -2,4 +2,4 @@
 
 
 def test_import():
-    import orchestrator.handler
+    import orchestrator.handler  # noqa: F401

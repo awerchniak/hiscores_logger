@@ -87,7 +87,10 @@ def parse_image(image):
     """Parse player ID and timestamp from a DDB event image.
 
     Examples:
-    >>> img = {"player": {"S": "ElderPlinius"}, "timestamp": {"S": "2021-12-15 18:19:00"}}
+    >>> img = {
+    ...     "player": {"S": "ElderPlinius"},
+    ...     "timestamp": {"S": "2021-12-15 18:19:00"},
+    ... }
     >>> parse_image(img)
     ('ElderPlinius', '2021-12-15 18:19:00')
 

@@ -67,7 +67,8 @@ def request_hiscores(
 
     if response.elapsed > timedelta(seconds=warn_secs):
         logger.warning(
-            f"Longer than expected response time from Hiscores API: {response.elapsed.seconds}s."
+            f"Longer than expected response time from Hiscores API: "
+            f"{response.elapsed.seconds}s."
         )
 
     if "<!doctype html>" in response.text:
@@ -75,8 +76,8 @@ def request_hiscores(
 
     if response.status_code != 200:
         raise ValueError(
-            f"Received status code {response.status_code} with reason '{response.reason}' "
-            f"for request '{response.request.url}'"
+            f"Received status code {response.status_code} with reason "
+            f"'{response.reason}' for request '{response.request.url}'"
         )
     return response
 
@@ -84,7 +85,8 @@ def request_hiscores(
 def sanitize_hiscores_stats(text: str) -> dict:
     """Sanitize hiscore_oldscool API result text.
 
-    API documentation: https://runescape.wiki/w/Application_programming_interface#Hiscores_Lite_2
+    API documentation:
+    https://runescape.wiki/w/Application_programming_interface#Hiscores_Lite_2
 
     """
 

@@ -38,7 +38,9 @@ def handler(event, context):
             "body": json.dumps(
                 {
                     "status": 400,
-                    "message": "API requires 'player', 'startTime', and 'endTime' params.",
+                    "message": (
+                        "API requires 'player', 'startTime', and 'endTime' params."
+                    ),
                 }
             ),
         }
@@ -58,7 +60,10 @@ def handler(event, context):
             "body": json.dumps(
                 {
                     "status": 400,
-                    "body": "API requires 'startTime' param with shape 'YYYY-mm-dd [HH:MM:SS]'",
+                    "body": (
+                        "API requires 'startTime' param with shape "
+                        "'YYYY-mm-dd [HH:MM:SS]'"
+                    ),
                 }
             ),
         }
@@ -75,7 +80,10 @@ def handler(event, context):
             "body": json.dumps(
                 {
                     "status": 400,
-                    "body": "API requires 'endTime' param with shape 'YYYY-mm-dd [HH:MM:SS]'",
+                    "body": (
+                        "API requires 'endTime' param with shape "
+                        "'YYYY-mm-dd [HH:MM:SS]'"
+                    ),
                 }
             ),
         }

@@ -38,7 +38,8 @@ def handler(event, context):
 
     # write result to `table`
     logger.info(
-        f"Putting payload for player '{payload['player']}', timestamp '{payload['timestamp']}'"
+        f"Putting payload for player '{payload['player']}', "
+        f"timestamp '{payload['timestamp']}'"
     )
     logger.debug(f"Putting payload {payload}")
     table.put_item(Item=payload)

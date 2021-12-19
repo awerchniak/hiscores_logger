@@ -26,7 +26,12 @@ cyan_error "Running unit tests..."
     --cov-report=html:.coverage_html
 )
 
-cyan_error "Enforcing black..."
+cyan_error "Enforcing formatters..."
 (set -x; black hiscores_tracker lambda tests)
+
+cyan_error "Checking linters..."
+(set -x; flake8 hiscores_tracker lambda tests \
+    --max-line-length=88 \
+    --ignore=E203,W503)
 
 cleanup
