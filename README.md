@@ -19,6 +19,7 @@ This project helps OSRS players to track and visualize their in-game progress us
 
 ```
 git clone https://github.com/awerchniak/cdk-hiscores-tracker.git
+cd cdk-hiscores-tracker
 ```
 
 ## Configure
@@ -58,6 +59,7 @@ We welcome contributions. If you would like to contribute, please fork the repo 
 
 ## Running unit tests
 ```
+pip install -r requirements-dev.txt
 bash run_tests.sh
 ```
 
@@ -67,6 +69,6 @@ bash run_tests.sh
 
 The core service is built on two Constructs: `HiScoresLogger` and `AggregatingTimeSeriesTable`. 
 
-The first uses a CloudWatch EventBridge to trigger an Orchestrator Lambda, which reads your configuration file and send instruction messages to an SQS Queue. A Lambda Function listens to this queue, and when it receives a request for a username, it queries the HiScores API, parses the response, and saves it to a table.
+The first uses a CloudWatch EventBridge to trigger an Orchestrator Lambda, which reads your configuration file and sends instruction messages to an SQS Queue. A Lambda Function listens to this queue, and when it receives a request for a username, it queries the HiScores API, parses the response, and saves it to a table.
 
-The second is a Dynmo Table with a Lambda function subscribed to write events. When the table is written to, the Lambda aggregates the new record into a daily sum row. The table also comes with a queryer Lambda Function and API Gateway Endpoint for easy reading with configurable daily aggregation.
+The second is a Dynmo Table with a Lambda Function subscribed to write events. When the table is written to, the Lambda aggregates the new record into a daily sum row. The table also comes with a queryer Lambda Function and API Gateway Endpoint for easy reading with configurable daily aggregation.
