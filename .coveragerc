@@ -2,6 +2,7 @@
 omit = 
     *test*
     *tst*
+    lambda/*/handler.py
 
 [report]
-fail_under = 75
+fail_under = 95
