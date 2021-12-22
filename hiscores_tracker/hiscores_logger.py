@@ -17,6 +17,10 @@ from hiscores_tracker.util import package_lambda
 class HiScoresLogger(Construct):
     """Automatically log OldSchoolRuneScape HiScores metrics to Dynamo table."""
 
+    @property
+    def orchestrator(self):
+        return self._orchestrator
+
     def __init__(
         self, scope: Construct, id: str, table: ddb.ITable, enabled=True, **kwargs
     ):
@@ -54,15 +58,14 @@ class HiScoresLogger(Construct):
         )
 
         # Create Orchestrator Lambda
-        handler_name = "orchestrator"
-        orchestrator_handler = package_lambda(
+        self._orchestrator = package_lambda(
             scope=self,
             handler_name="orchestrator",
             function_name="OrchestratorLambda",
             description="Read configuration and kick off HiScores tracking.",
             environment={"GET_AND_PARSE_QUEUE_URL": get_and_parse_queue.queue_url},
         )
-        get_and_parse_queue.grant_send_messages(orchestrator_handler)
+        get_and_parse_queue.grant_send_messages(self._orchestrator)
 
         # Create Event to trigger Orchestrator on schedule
         rule = events.Rule(
@@ -75,7 +78,7 @@ class HiScoresLogger(Construct):
                 hour="0-2,7-23",  # Trigger between 7am and 2am
             ),
         )
-        rule.add_target(targets.LambdaFunction(orchestrator_handler))
+        rule.add_target(targets.LambdaFunction(self._orchestrator))
 
     def create_dependencies_layer(
         self, layer_id: str, requirements_file: str, output_dir: str

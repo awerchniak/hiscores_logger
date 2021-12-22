@@ -29,4 +29,7 @@ def handler(event, context):
         ],
     )
 
-    return [player.replace("-", " ") for player in player_list]
+    return {
+        "statusCode": 200,
+        "body": json.dumps([player.replace("-", " ") for player in player_list]),
+    }

@@ -13,7 +13,7 @@ def test_synthesize():
     template.resource_count_is("AWS::Lambda::Function", 4)
     template.resource_count_is("AWS::DynamoDB::Table", 1)
     template.resource_count_is("AWS::SQS::Queue", 1)
-    template.resource_count_is("AWS::ApiGateway::RestApi", 1)
+    template.resource_count_is("AWS::ApiGateway::RestApi", 2)
     template.resource_count_is("AWS::Events::Rule", 1)
 
     # Test HiScoresTable created
