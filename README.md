@@ -36,15 +36,21 @@ cdk bootstrap aws://ACCOUNT-NUMBER/REGION
 cdk deploy
 ```
 
+You can now navigate to the AWS console and see your resources created. Take a look at the Service Overview below to get oriented. In particular, see DynamoDB and Lambda.
+
 At the end of the terminal output, you should see something like:
 ```
 Outputs:
 HiscoresTrackerStack.HiScoresATSTQueryHiScoresDataEndpointB5BC150F = https://511h1wh89e.execute-api.us-east-1.amazonaws.com/prod/
+HiscoresTrackerStack.TriggerHiScoresLogEventEndpointBCAB06A2 = https://n2mtfqtg7h.execute-api.us-east-1.amazonaws.com/prod/
 ```
 
-Your Stack name and URL will be slightly different. Make note of the URL; this is a public API you can call to query your stats database. It takes 3 parameters: `{player: str, startTime: str, endTime: str}`.
+Your Stack name and URL will be slightly different. Make note of these URLs; they are public APIs
+you can use to interact with your service.
 
-You can now navigate to the AWS console and see your resources created. Take a look at the Service Overview below to get oriented. In particular, see DynamoDB and Lambda.
+The first, QueryHiScoresDataEndpoint, is a public Rest API you can call to query your stats datatabse. It supports `GET` and takes 3 parameters: `{player: str, startTime: str, endTime: str}`.
+
+The second, TriggerHiScoresLogEventEndpoint, is a public Rest API you can call to trigger a save event to your stats database. It supports `POST` and takes no parameters.
 
 ## Cleanup
 
@@ -62,6 +68,14 @@ We welcome contributions. If you would like to contribute, please fork the repo 
 ```
 pip install -r requirements-dev.txt
 bash run_tests.sh
+```
+
+## Running integration tests
+This repo contains an extremely simple integration test that triggers a save event and verifies that the data is returned in a query. To run it, make note of your Log API and Query API from the "Deploy" section, and issue the following command:
+```
+python run_integration_test.py \
+    -i YOUR_TRIGGER_LOG_EVENT_URL \
+    -o YOUR_QUERY_DATABASE_URL
 ```
 
 # Service overview
