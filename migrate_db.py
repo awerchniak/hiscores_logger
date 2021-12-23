@@ -1,18 +1,18 @@
 #!/.venv/bin/python
 """Python script to migrate RDS HiScores database to DDB."""
+import argparse
 import logging
-import requests
-
-
 from collections import OrderedDict
 from datetime import datetime, timedelta
 from functools import reduce
 from typing import List
 
+import requests
+
 logging.basicConfig(level=logging.INFO)
 
 PLAYERS = ["ElderPlinius", "Tarvis Devor", "Brec", "Dethaele"]
-TABLE_START_END = ["2020-08-14", "2022-01-02"]
+TABLE_START_END = ["2020-08-14", "2022-01-01"]
 HISCORES_RESPONSE_SKILLS: List[str] = [
     "Overall",
     "Attack",
@@ -41,7 +41,19 @@ HISCORES_RESPONSE_SKILLS: List[str] = [
 ]
 HISCORES_RESPONSE_SKILL_COLS: List[str] = ["rank", "level", "experience"]
 TABLE_MAP: dict = {"rank": "rnk", "level": "lvl", "experience": "xp"}
-API = "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
+API = (
+    "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/"
+    "default/QueryOsrsMetricsDbLambda"
+)
+
+
+def query_rds_mysql(query_str):
+    response = requests.get(API, params=dict(sql=query_str))
+    items = response.json()
+    if not isinstance(items, list):
+        raise ValueError(f"Unexpected response for query '{query_str}': {items}")
+    return items
+
 
 def build_sql(table: str, skills: List[str], player: str, boundaries: List[str]):
     """Build MySQL Statement for querying HiScores DB."""
@@ -52,16 +64,10 @@ def build_sql(table: str, skills: List[str], player: str, boundaries: List[str])
     )
 
 
-def parse_response_item(response_item: List, table: str, skills: List[str], player: str):
-    """Parse data returned by HiScores DB.
-
-    Examples:
-    >>> response_item = ['2021-12-23 14:55:43', 52297822, 3274504, 2054713, 5403638]
-    >>> parse_response(response_item, "skills.experience", ["Overall", "Attack", "Defence", "Strength"], "ElderPlinius")
-    {'timestamp':'2021-12-23 14:55:43', 'player': 'ElderPlinius',' Overall': 52297822, 'Attack': 3274504, 'Defence': 2054713, 'Strength': 5403638}
-
-    """
-
+def parse_response_item(
+    response_item: List, table: str, skills: List[str], player: str
+):
+    """Parse data returned by HiScores DB."""
     result = dict()
     result["timestamp"] = response_item[0]
     result["player"] = player
@@ -85,6 +91,7 @@ def _mergedicts(dict1, dict2):
         else:
             yield (k, dict2[k])
 
+
 def merge_dicts(d1, d2):
     return dict(_mergedicts(d1, d2))
 
@@ -96,9 +103,11 @@ def get_dynamo_rows(player, boundaries):
     for table_name in (f"skills.{col}" for col in HISCORES_RESPONSE_SKILL_COLS):
         logging.info(f"Querying {table_name}")
         sql = build_sql(table_name, HISCORES_RESPONSE_SKILLS, player, boundaries)
-        resp = requests.get(API, params=dict(sql=sql))
-        items = resp.json()
-        parsed_items = [parse_response_item(item, table_name, HISCORES_RESPONSE_SKILLS, player) for item in items]
+        items = query_rds_mysql(sql)
+        parsed_items = [
+            parse_response_item(item, table_name, HISCORES_RESPONSE_SKILLS, player)
+            for item in items
+        ]
         responses.append(parsed_items)
     merged_responses = [reduce(merge_dicts, response) for response in zip(*responses)]
     return merged_responses
@@ -111,37 +120,52 @@ def get_time_boundaries(start: str, end: str):
     end_dt = datetime.strptime(end, "%Y-%m-%d")
     months = list(
         OrderedDict(
-            (
-                (start_dt + timedelta(_)).strftime("%Y-%m"),
-                None
-            ) for _ in range((end_dt-start_dt).days)
+            ((start_dt + timedelta(_)).strftime("%Y-%m"), None)
+            for _ in range((end_dt + timedelta(days=1) - start_dt).days)
         ).keys()
     )
-    return [[months[i], months[i+1]] for i in range(len(months)-1)]
+    return [[months[i], months[i + 1]] for i in range(len(months) - 1)]
 
 
-def main():
+def main(start, end):
     """Read from RDS, parse, and insert into DDB.
 
     Strategy: work 1 month at a time, and sleep 1 minute in between batch
     inserts to avoid DDB throttling.
 
     """
+    logging.info(f"Time range: [{start}, {end}]")
     for player in PLAYERS:
         logging.info(f"Beginning {player}")
-        for i, boundaries in enumerate(get_time_boundaries(*TABLE_START_END)):
+        for i, boundaries in enumerate(get_time_boundaries(start, end)):
             result = get_dynamo_rows(player, boundaries)
             n = len(result)
             if n > 0:
                 logging.info(f"Got result length {n}. Example: {result[0]}")
             else:
-                logging.warning(f"Received no results from DB.")
+                logging.warning("Received no results from DB.")
 
-            ## INSERT INTO TABLE
+            # INSERT INTO TABLE
 
             if i > 0:
                 break
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-s",
+        "--start-date",
+        type=str,
+        help="Start date of migration window.",
+        default="2020-08-14",
+    )
+    parser.add_argument(
+        "-e",
+        "--end-date",
+        type=str,
+        help="End date of migration window.",
+        default="2022-01-1",
+    )
+    args = parser.parse_args()
+    main(args.start_date, args.end_date)
