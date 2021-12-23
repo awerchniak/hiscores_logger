@@ -10,6 +10,10 @@ class HiscoresTrackerStack(Stack):
     """Track your OldSchoolRuneScape HiScores metrics over time."""
 
     @property
+    def insert_url(self):
+        return self._insert_url
+
+    @property
     def query_url(self):
         return self._query_url
 
@@ -24,6 +28,7 @@ class HiscoresTrackerStack(Stack):
         # Provision HiScores AggregatingTimeSeriesTable
         atst = AggregatingTimeSeriesTable(self, "HiScoresATST")
         self._query_url = atst.query_api.url
+        self._insert_url = atst.insert_api.url
 
         # Provision HiScores API Logger
         hiscores_logger = HiScoresLogger(self, "OSRSHiScoresLogger", table=atst.table)

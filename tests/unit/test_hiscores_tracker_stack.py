@@ -10,10 +10,10 @@ def test_synthesize():
     template = assertions.Template.from_stack(stack)
 
     # Assert no extraneous resources
-    template.resource_count_is("AWS::Lambda::Function", 4)
+    template.resource_count_is("AWS::Lambda::Function", 5)
     template.resource_count_is("AWS::DynamoDB::Table", 1)
     template.resource_count_is("AWS::SQS::Queue", 1)
-    template.resource_count_is("AWS::ApiGateway::RestApi", 2)
+    template.resource_count_is("AWS::ApiGateway::RestApi", 3)
     template.resource_count_is("AWS::Events::Rule", 1)
 
     # Test HiScoresTable created
