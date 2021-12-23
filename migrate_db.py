@@ -1,7 +1,9 @@
 #!/.venv/bin/python
 """Python script to migrate RDS HiScores database to DDB."""
 import argparse
+import json
 import logging
+import time
 from collections import OrderedDict
 from datetime import datetime, timedelta
 from functools import reduce
@@ -127,7 +129,7 @@ def get_time_boundaries(start: str, end: str):
     return [[months[i], months[i + 1]] for i in range(len(months) - 1)]
 
 
-def main(start, end):
+def main(start, end, insert_url):
     """Read from RDS, parse, and insert into DDB.
 
     Strategy: work 1 month at a time, and sleep 1 minute in between batch
@@ -137,18 +139,23 @@ def main(start, end):
     logging.info(f"Time range: [{start}, {end}]")
     for player in PLAYERS:
         logging.info(f"Beginning {player}")
-        for i, boundaries in enumerate(get_time_boundaries(start, end)):
+        for boundaries in get_time_boundaries(start, end):
             result = get_dynamo_rows(player, boundaries)
             n = len(result)
             if n > 0:
                 logging.info(f"Got result length {n}. Example: {result[0]}")
             else:
                 logging.warning("Received no results from DB.")
+                continue
 
             # INSERT INTO TABLE
-
-            if i > 0:
-                break
+            for item in result:
+                logging.info(f"Inserting data for {player}:{item['timestamp']}")
+                json_item = json.dumps(item)
+                result = requests.post(insert_url, params=dict(item=json_item))
+                if result.status_code != 200:
+                    raise ValueError(f"Error {result.status_code}: {result.text}")
+                time.sleep(0.1)
 
 
 if __name__ == "__main__":
@@ -167,5 +174,12 @@ if __name__ == "__main__":
         help="End date of migration window.",
         default="2022-01-1",
     )
+    parser.add_argument(
+        "-u",
+        "--insert-url",
+        type=str,
+        help="URL for table insertion API.",
+        required=True,
+    )
     args = parser.parse_args()
-    main(args.start_date, args.end_date)
+    main(args.start_date, args.end_date, args.insert_url)
