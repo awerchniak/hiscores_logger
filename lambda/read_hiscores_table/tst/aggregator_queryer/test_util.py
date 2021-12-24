@@ -114,6 +114,8 @@ def test_lint_items_invalid():
         ("2021-12-18 00:00:00", "2021-12-18 18:30:00", util.AggregationLevel.NONE),
         ("2021-12-17", "2021-12-18", util.AggregationLevel.DAILY),
         ("2021-12-10 00:00:00", "2021-12-18 18:30:00", util.AggregationLevel.DAILY),
+        ("2020-12", "2021-01", util.AggregationLevel.MONTHLY),
+        ("2020-12-01 00:00:00", "2021-12-01 00:00:00", util.AggregationLevel.MONTHLY),
     ],
 )
 def test_infer_aggregation_level(start_time, end_time, expected):
@@ -125,6 +127,7 @@ def test_infer_aggregation_level(start_time, end_time, expected):
     [
         ("2021-12-18 00:00:00", "2021-12-18 18:30:00", util.AggregationLevel.NONE),
         ("2021-12-17", "2021-12-18", util.AggregationLevel.DAILY),
+        ("2020-12-17 00:00:00", "2021-12-17 00:00:00", util.AggregationLevel.MONTHLY),
     ],
 )
 def test_get_query_boundaries(start_time, end_time, aggregation_level):
@@ -134,8 +137,21 @@ def test_get_query_boundaries(start_time, end_time, aggregation_level):
         assert result == (start_time, end_time)
     elif aggregation_level == util.AggregationLevel.DAILY:
         assert all([dt.startswith(util.DAILY_SENTINEL) for dt in result])
+        assert all(
+            [util.valid_datetime(dt.split("#")[1], util.DATE_FMT) for dt in result]
+        )
+    elif aggregation_level == util.AggregationLevel.MONTHLY:
+        assert all([dt.startswith(util.MONTHLY_SENTINEL) for dt in result])
+        assert all(
+            [util.valid_datetime(dt.split("#")[1], util.MONTH_FMT) for dt in result]
+        )
 
 
 def test_get_query_boundaries_invalid():
     with pytest.raises(ValueError):
         util.get_query_boundaries("", "", 3)
+
+
+def test_convert_timestamp_invalid():
+    with pytest.raises(ValueError):
+        util.convert_timestamp("", [])

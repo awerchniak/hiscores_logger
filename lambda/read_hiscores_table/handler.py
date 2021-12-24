@@ -6,6 +6,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 from read_hiscores_table.lib.aggregation_queryer.util import (
     DATE_FMT,
+    MONTH_FMT,
     TIMESTAMP_FMT,
     CustomEncoder,
     get_query_boundaries,
@@ -53,6 +54,7 @@ def handler(event, context):
         [
             valid_datetime(params["startTime"], TIMESTAMP_FMT),
             valid_datetime(params["startTime"], DATE_FMT),
+            valid_datetime(params["startTime"], MONTH_FMT),
         ]
     ):
         return {
@@ -62,7 +64,7 @@ def handler(event, context):
                     "status": 400,
                     "body": (
                         "API requires 'startTime' param with shape "
-                        "'YYYY-mm-dd [HH:MM:SS]'"
+                        "'YYYY-mm[-dd [HH:MM:SS]]'"
                     ),
                 }
             ),
@@ -73,6 +75,7 @@ def handler(event, context):
         [
             valid_datetime(params["endTime"], TIMESTAMP_FMT),
             valid_datetime(params["endTime"], DATE_FMT),
+            valid_datetime(params["endTime"], MONTH_FMT),
         ]
     ):
         return {
@@ -82,7 +85,7 @@ def handler(event, context):
                     "status": 400,
                     "body": (
                         "API requires 'endTime' param with shape "
-                        "'YYYY-mm-dd [HH:MM:SS]'"
+                        "'YYYY-mm[-dd [HH:MM:SS]]'"
                     ),
                 }
             ),

@@ -8,6 +8,7 @@ from datetime import datetime
 
 TIMESTAMP_FMT = "%Y-%m-%d %H:%M:%S"
 DATE_FMT = "%Y-%m-%d"
+MONTH_FMT = "%Y-%m"
 
 
 def main(args):
@@ -40,15 +41,15 @@ def main(args):
                 endTime=end_time,
             ),
         )
-        query = query_response.json()
-        if not query:
-            logger.error(f"Received unexpected response: {query}")
+        granular_result = query_response.json()
+        if query_response.status_code != 200 or not granular_result:
+            logger.error(f"Received unexpected response: {granular_result}")
             raise AssertionError(f"Granular query for player {player} invalid.")
 
         start_time = datetime.strftime(before, DATE_FMT)
         end_time = datetime.strftime(after, DATE_FMT)
         logger.info(
-            f"Querying aggregated data for {player}, "
+            f"Querying daily aggregated data for {player}, "
             f"startTime={start_time}, endTime={end_time}"
         )
         query_response = requests.get(
@@ -59,10 +60,31 @@ def main(args):
                 endTime=end_time,
             ),
         )
-        query = query_response.json()
-        if not query:
-            logger.error(f"Received unexpected response: {query}")
-            raise AssertionError(f"Aggregated query for player {player} invalid.")
+        daily_result = query_response.json()
+        if query_response.status_code != 200 or not daily_result:
+            logger.error(f"Received unexpected response: {daily_result}")
+            raise AssertionError(f"Daily aggregated query for player {player} invalid.")
+
+        start_time = datetime.strftime(before, MONTH_FMT)
+        end_time = datetime.strftime(after, MONTH_FMT)
+        logger.info(
+            f"Querying monthly aggregated data for {player}, "
+            f"startTime={start_time}, endTime={end_time}"
+        )
+        query_response = requests.get(
+            args.query_api,
+            params=dict(
+                player=player,
+                startTime=start_time,
+                endTime=end_time,
+            ),
+        )
+        monthly_result = query_response.json()
+        if query_response.status_code != 200 or not monthly_result:
+            logger.error(f"Received unexpected response: {monthly_result}")
+            raise AssertionError(
+                f"Monthly aggregated query for player {player} invalid."
+            )
 
     logger.info("TESTS PASSED")
 
