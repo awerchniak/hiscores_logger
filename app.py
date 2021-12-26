@@ -3,10 +3,10 @@ import os
 
 import aws_cdk as cdk
 
-from hiscores_tracker.hiscores_tracker_stack import HiscoresTrackerStack
+from hiscores_tracker.pipeline_stack import HiScoresTrackerPipelineStack
 
 
 app = cdk.App()
-HiscoresTrackerStack(app, "HiscoresTrackerStack")
+HiScoresTrackerPipelineStack(app, "HiScoresTrackerPipelineStack")
 
 app.synth()
