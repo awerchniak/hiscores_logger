@@ -1,6 +1,8 @@
 from constructs import Construct
 from aws_cdk import Stack, pipelines
 
+from .pipeline_stage import HiscoresTrackerPipelineStage
+
 
 class HiScoresTrackerPipelineStack(Stack):
     """CI/CD Pipeline for HiScoresTracker project."""
@@ -23,3 +25,5 @@ class HiScoresTrackerPipelineStack(Stack):
                 ]
             ),
         )
+        deploy = HiscoresTrackerPipelineStage(self, "Deploy")
+        deploy_stage = pipeline.add_stage(deploy)
