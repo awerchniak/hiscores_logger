@@ -28,10 +28,6 @@ class AggregatingTimeSeriesTable(Construct):
     def query_api(self):
         return self._query_api
 
-    @property
-    def insert_api(self):
-        return self._insert_api
-
     def __init__(self, scope: Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
@@ -91,24 +87,3 @@ class AggregatingTimeSeriesTable(Construct):
             parameters={"player": "str", "startTime": "str", "endTime": "str"},
         )
         self._query_api.root.add_method("GET")
-
-        # Create lambda to insert directly into table for DB migration
-        insertion_fn = package_lambda(
-            scope=self,
-            handler_name="inserter",
-            function_name="HiScoresPutItem",
-            description="Insert into HiScoresDB.",
-            environment={
-                "HISCORES_TABLE_NAME": self._table.table_name,
-            },
-        )
-        self._table.grant_write_data(insertion_fn)
-
-        # Expose Rest API for insertion_fn
-        self._insert_api = apigw.LambdaRestApi(
-            self,
-            "HiScoresPutItemEntry",
-            handler=insertion_fn,
-            parameters={"item": "str"},
-        )
-        self._insert_api.root.add_method("POST")
