@@ -28,7 +28,7 @@ def test_synthesize():
                 {"AttributeName": "player", "AttributeType": "S"},
                 {"AttributeName": "timestamp", "AttributeType": "S"},
             ],
-            "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5},
+            "ProvisionedThroughput": {"ReadCapacityUnits": 20, "WriteCapacityUnits": 5},
             "SSESpecification": {"SSEEnabled": True},
             "StreamSpecification": {"StreamViewType": "NEW_IMAGE"},
         },
