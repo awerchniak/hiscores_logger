@@ -42,7 +42,7 @@ class AggregatingTimeSeriesTable(Construct):
             partition_key=ddb.Attribute(name="player", type=ddb.AttributeType.STRING),
             sort_key=ddb.Attribute(name="timestamp", type=ddb.AttributeType.STRING),
             encryption=ddb.TableEncryption.AWS_MANAGED,
-            read_capacity=5,
+            read_capacity=20,
             write_capacity=5,
             removal_policy=RemovalPolicy.DESTROY,
             stream=ddb.StreamViewType.NEW_IMAGE,
