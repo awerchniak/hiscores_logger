@@ -7,7 +7,19 @@ OSRS HiScores Tracking with AWS CDK
 
 This project helps OSRS players to track and visualize their in-game progress using the HiScores API. It is built on Amazon Web Services and is easily bootstrapped using AWS CDK. As such, having an AWS account and the AWS CLI installed is a prerequisite.
 
+
+# Service overview
+
+<img src="./assetts/service_diagram.png" width=1000 />
+
+The core service is built on two Constructs: `HiScoresLogger` and `AggregatingTimeSeriesTable`. 
+
+The first uses a CloudWatch EventBridge to trigger an Orchestrator Lambda, which reads your configuration file and sends instruction messages to an SQS Queue. A Lambda Function listens to this queue, and when it receives a request for a username, it queries the HiScores API, parses the response, and saves it to a table.
+
+The second is a Dynmo Table with a Lambda Function subscribed to write events. When the table is written to, the Lambda aggregates the new record into a daily sum row. The table also comes with a queryer Lambda Function and API Gateway Endpoint for easy reading with configurable daily aggregation.
+
 # Getting Started
+You can create an instance of this service for yourself using AWS CDK. Follow these steps to get started.
 
 ## Prerequisites
 
@@ -108,13 +120,3 @@ python run_integration_test.py \
     -i https://n2mtfqtg7h.execute-api.us-east-1.amazonaws.com/prod/ \
     -o https://511h1wh89e.execute-api.us-east-1.amazonaws.com/prod/
 ```
-
-# Service overview
-
-<img src="./assetts/service_diagram.png" width=1000 />
-
-The core service is built on two Constructs: `HiScoresLogger` and `AggregatingTimeSeriesTable`. 
-
-The first uses a CloudWatch EventBridge to trigger an Orchestrator Lambda, which reads your configuration file and sends instruction messages to an SQS Queue. A Lambda Function listens to this queue, and when it receives a request for a username, it queries the HiScores API, parses the response, and saves it to a table.
-
-The second is a Dynmo Table with a Lambda Function subscribed to write events. When the table is written to, the Lambda aggregates the new record into a daily sum row. The table also comes with a queryer Lambda Function and API Gateway Endpoint for easy reading with configurable daily aggregation.
