@@ -11,14 +11,36 @@ This project helps OSRS players to track and visualize their in-game progress us
 
 ## Prerequisites
 
-1. [Create a free-tier AWS account](https://aws.amazon.com/free) (if you don't already have one)
-1. [Install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-2. [Configure the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
-3. Install the CDK CLI: `npm install -g aws-cdk@2.0.0`
+### 1. Install Python
+You can find the latest release at https://www.python.org/downloads/. As of writing, we are on 3.8.10.
+
+### 2. Create a free-tier AWS account
+If you don't already have one, go to https://aws.amazon.com/free and sign up.
+
+### 3. Configure permissions
+You will need to create a new IAM policy to deploy this application. After creating your account, navigate to IAM within the AWS management console. Create a new policy with the following permissions:
+* IAMFullAccess
+* AWSCodeDeployFullAccess
+* AdministratorAccess
+* AWSCloudFormationFullAccess
+
+Now, create a new IAM group and attach this policy to it. Following this, create a user in the group for yourself.
+
+### 4. Install the AWS CLI
+Follow [these instructions](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). To verify that it works: `which aws`.
+
+### 5. Configure the AWS CLI
+With the IAM user you created above, follow [these instructions](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-creds) to configure your AWS CLI.
+
+### 6. Install the CDK CLI
+
+```bash
+npm install -g aws-cdk@2.0.0
+```
 
 ## Clone the repo
 
-```
+```bash
 git clone https://github.com/awerchniak/cdk-hiscores-tracker.git
 cd cdk-hiscores-tracker
 ```
@@ -28,7 +50,7 @@ Edit the file located at `lambda/orchestrator/players.txt` to use the usernames 
 
 ## Build and deploy
 
-```
+```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -56,7 +78,7 @@ The second, TriggerHiScoresLogEventEndpoint, is a public Rest API you can call t
 
 When you are finished, you can destroy all resources with:
 
-```
+```bash
 cdk destroy
 ```
 
@@ -65,17 +87,26 @@ cdk destroy
 We welcome contributions. If you would like to contribute, please fork the repo and issue a pull request with your changes. We will respond to all PRs within a 1 week SLA. Prior to submitting your pull request, ensure all tests are passing.
 
 ## Running unit tests
-```
+```bash
 pip install -r requirements-dev.txt
 bash run_tests.sh
 ```
 
 ## Running integration tests
 This repo contains an extremely simple integration test that triggers a save event and verifies that the data is returned in a query. To run it, make note of your Log API and Query API from the "Deploy" section, and issue the following command:
-```
+
+```bash
 python run_integration_test.py \
     -i YOUR_TRIGGER_LOG_EVENT_URL \
     -o YOUR_QUERY_DATABASE_URL
+```
+
+For example, using the example deployment from above, the tests can be run like the following:
+
+```bash
+python run_integration_test.py \
+    -i https://n2mtfqtg7h.execute-api.us-east-1.amazonaws.com/prod/ \
+    -o https://511h1wh89e.execute-api.us-east-1.amazonaws.com/prod/
 ```
 
 # Service overview
