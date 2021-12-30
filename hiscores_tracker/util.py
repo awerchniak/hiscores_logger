@@ -23,6 +23,7 @@ def package_lambda(
     environment=None,
     layers=None,
     retry_attempts=None,
+    timeout=None,
 ):
     """Package handler source and provision Lambda function."""
     original_code_dir = os.path.join("lambda", handler_name)
@@ -37,4 +38,5 @@ def package_lambda(
             environment=environment,
             layers=layers,
             retry_attempts=retry_attempts,
+            timeout=timeout,
         )

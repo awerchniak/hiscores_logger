@@ -1,4 +1,4 @@
-from aws_cdk import RemovalPolicy
+from aws_cdk import Duration, RemovalPolicy
 from aws_cdk import aws_apigateway as apigw
 from aws_cdk import aws_dynamodb as ddb
 from aws_cdk import aws_lambda as _lambda
@@ -76,6 +76,7 @@ class AggregatingTimeSeriesTable(Construct):
             environment={
                 "HISCORES_TABLE_NAME": self._table.table_name,
             },
+            timeout=Duration.seconds(60),
         )
         self._table.grant_read_data(queryer)
 
