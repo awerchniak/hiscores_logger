@@ -125,8 +125,10 @@ def lint_items(items, aggregation_level):
         elif aggregation_level in [AggregationLevel.DAILY, AggregationLevel.MONTHLY]:
             item["timestamp"] = item["timestamp"].split("#")[1]
             divisor = item.pop("divisor")
-            item["skills"] = normalize_nested_dict(item["skills"], divisor)
-            item["activities"] = normalize_nested_dict(item["activities"], divisor)
+            if "skills" in item:
+                item["skills"] = normalize_nested_dict(item["skills"], divisor)
+            if "activities" in item:
+                item["activities"] = normalize_nested_dict(item["activities"], divisor)
         else:
             raise ValueError(f"Unsupported aggregation_level '{aggregation_level}.")
 
