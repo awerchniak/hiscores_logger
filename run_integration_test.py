@@ -10,6 +10,9 @@ TIMESTAMP_FMT = "%Y-%m-%d %H:%M:%S"
 DATE_FMT = "%Y-%m-%d"
 MONTH_FMT = "%Y-%m"
 
+LEGACY = "legacy"
+V0 = "v0"
+
 
 def main(args):
     logger = logging.getLogger(__name__)
@@ -34,7 +37,7 @@ def main(args):
             f"startTime={start_time}, endTime={end_time}"
         )
         query_response = requests.get(
-            args.query_api,
+            args.query_api + V0,
             params=dict(
                 player=player,
                 startTime=start_time,
@@ -53,7 +56,7 @@ def main(args):
             f"startTime={start_time}, endTime={end_time}"
         )
         query_response = requests.get(
-            args.query_api,
+            args.query_api + V0,
             params=dict(
                 player=player,
                 startTime=start_time,
@@ -65,6 +68,21 @@ def main(args):
             logger.error(f"Received unexpected response: {daily_result}")
             raise AssertionError(f"Daily aggregated query for player {player} invalid.")
 
+        for category in ["level", "rank", "experience"]:
+            sql = (
+                f"SELECT timestamp,Slayer,Farming FROM skills.{category} "
+                f"WHERE player='{player}' AND timestamp > '{start_time} 00:00:00' "
+                f"AND timestamp < '{end_time} 23:59:59' ORDER BY timestamp ASC"
+            )
+            logger.info(f"Querying legacy API for sql={sql}")
+            query_response = requests.get(args.query_api + LEGACY, params=dict(sql=sql))
+            legacy_result = query_response.json()
+            if query_response.status_code != 200 or not legacy_result:
+                logger.error(f"Received unexpected response: {legacy_result}")
+                raise AssertionError(
+                    f"Daily aggregated query for player {player} invalid."
+                )
+
         start_time = datetime.strftime(before, MONTH_FMT)
         end_time = datetime.strftime(after, MONTH_FMT)
         logger.info(
@@ -72,7 +90,7 @@ def main(args):
             f"startTime={start_time}, endTime={end_time}"
         )
         query_response = requests.get(
-            args.query_api,
+            args.query_api + V0,
             params=dict(
                 player=player,
                 startTime=start_time,
@@ -99,7 +117,11 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument(
-        "-o", "--query-api", type=str, help="Endpoint to query database.", required=True
+        "-o",
+        "--query-api",
+        type=str,
+        help="Endpoint to query database.",
+        required=True,
     )
     args = parser.parse_args()
 
