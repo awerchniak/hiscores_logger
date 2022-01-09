@@ -94,6 +94,13 @@ def sanitize_hiscores_stats(text: str) -> dict:
     # split string by line
     lines = text.strip().split("\n")
 
+    if len(lines) != len(HISCORES_RESPONSE_SKILLS) + len(HISCORES_RESPONSE_ACTIVITIES):
+        logger.warning(
+            "HiScores response contains unexpected number of lines. Have the set of "
+            "skills or activities returned by the HiScores API changed recently? "
+            "Check https://runescape.wiki/w/Application_programming_interface#Old_School_Hiscores."
+        )
+
     # skills are returned first
     skill_lines = lines[: len(HISCORES_RESPONSE_SKILLS)]
     # parse and label elements

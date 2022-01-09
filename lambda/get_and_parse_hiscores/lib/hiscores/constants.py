@@ -70,6 +70,7 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "KreeArra",
     "KrilTsutsaroth",
     "Mimic",
+    "Nex",
     "Nightmare",
     "PhosanisNightmare",
     "Obor",

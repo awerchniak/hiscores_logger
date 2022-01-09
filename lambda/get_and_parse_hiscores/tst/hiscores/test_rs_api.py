@@ -100,6 +100,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         278341,6
         -1,-1
         -1,-1
@@ -166,6 +167,7 @@ def successful_parsed_response(player_name):
             "LMS_Rank": {"kc": -1, "rnk": -1},
             "LeaguePoints": {"kc": -1, "rnk": -1},
             "Mimic": {"kc": -1, "rnk": -1},
+            "Nex": {"kc": -1, "rnk": -1},
             "Nightmare": {"kc": -1, "rnk": -1},
             "Obor": {"kc": -1, "rnk": -1},
             "PhosanisNightmare": {"kc": -1, "rnk": -1},
