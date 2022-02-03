@@ -125,7 +125,6 @@ def player_name():
     return "PlayerName"
 
 
-@pytest.fixture
 def successful_parsed_response(player_name):
     return {
         "activities": {
@@ -220,6 +219,13 @@ def successful_parsed_response(player_name):
     }
 
 
+@pytest.mark.parametrize(
+    "player,api",
+    [
+        ("ElderPlinius", rs_api.HISCORES_API),
+        ("IronPlinius", rs_api.HISCORES_IRONMAN_API),
+    ],
+)
 @mock.patch(
     f"{rs_api.__name__}.requests.get",
     side_effect=MockRequestsGet(
@@ -229,13 +235,13 @@ def successful_parsed_response(player_name):
         reason="OK",
     ),
 )
-def test_get_parse_hiscores_valid(mock_get, player_name, successful_parsed_response):
-    response = rs_api.request_hiscores(player_name)
-    mock_get.assert_called_once()
+def test_get_parse_hiscores_valid(mock_get, player, api):
+    response = rs_api.request_hiscores(player)
+    mock_get.assert_called_once_with(api, params=dict(player=player), timeout=mock.ANY)
 
     payload = rs_api.process_hiscores_response(response)
     timestamp = payload.pop("timestamp")
-    assert payload == successful_parsed_response
+    assert payload == successful_parsed_response(player_name=player)
     assert timestamp is not None
 
 

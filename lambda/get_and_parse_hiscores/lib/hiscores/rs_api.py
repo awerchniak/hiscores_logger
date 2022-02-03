@@ -16,6 +16,9 @@ from .constants import (
 logger = logging.getLogger()
 
 HISCORES_API = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws"
+HISCORES_IRONMAN_API = (
+    "https://secure.runescape.com/m=hiscore_oldschool_ironman/index_lite.ws"
+)
 
 __all__ = [
     "InvalidSchemaError",
@@ -31,6 +34,12 @@ class InvalidSchemaError(Exception):
 
 class HiscoresDownError(Exception):
     """Indicates an error connecting with the OSRS HiScores API."""
+
+
+def get_hiscores_api(player: str) -> str:
+    if "iron" in player.lower():
+        return HISCORES_IRONMAN_API
+    return HISCORES_API
 
 
 def _parse_hiscores_response_line(line: str, schema: List[str]) -> dict:
@@ -59,7 +68,10 @@ def request_hiscores(
     """Call hiscore_oldscool API to request stats for a given player."""
     try:
         response = requests.get(
-            HISCORES_API, params={"player": player}, timeout=timeout, **kwargs
+            get_hiscores_api(player=player),
+            params={"player": player},
+            timeout=timeout,
+            **kwargs,
         )
     except requests.exceptions.ReadTimeout as e:
         raise HiscoresDownError(
