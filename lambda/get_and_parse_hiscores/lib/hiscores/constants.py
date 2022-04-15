@@ -43,6 +43,7 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "ClueScrolls_master",
     "LMS_Rank",
     "SoulWars_Zeal",
+    "GuardiansOfTheRift",
     "AbyssalSire",
     "AlchemicalHydra",
     "BarrowsChests",

@@ -70,6 +70,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         238864,132
         -1,-1
         -1,-1
@@ -157,6 +158,7 @@ def successful_parsed_response(player_name):
             "GeneralGraardor": {"kc": -1, "rnk": -1},
             "GiantMole": {"kc": -1, "rnk": -1},
             "GrotesqueGuardians": {"kc": -1, "rnk": -1},
+            "GuardiansOfTheRift": {"kc": -1, "rnk": -1},
             "Hespori": {"kc": 37, "rnk": 126798},
             "KalphiteQueen": {"kc": -1, "rnk": -1},
             "KingBlackDragon": {"kc": -1, "rnk": -1},
