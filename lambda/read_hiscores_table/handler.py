@@ -181,6 +181,10 @@ def handle_legacy(event, context):
     return {
         "statusCode": 200,
         "body": json.dumps(formatted_query_result, cls=CustomEncoder),
+        "headers": {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+        },
     }
 
 
