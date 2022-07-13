@@ -71,6 +71,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         238864,132
         -1,-1
         -1,-1
@@ -172,6 +173,7 @@ def successful_parsed_response(player_name):
             "Nightmare": {"kc": -1, "rnk": -1},
             "Obor": {"kc": -1, "rnk": -1},
             "PhosanisNightmare": {"kc": -1, "rnk": -1},
+            "PvPArena": {"kc": -1, "rnk": -1},
             "Sarachnis": {"kc": -1, "rnk": -1},
             "Scorpia": {"kc": -1, "rnk": -1},
             "Skotizo": {"kc": 6, "rnk": 278341},

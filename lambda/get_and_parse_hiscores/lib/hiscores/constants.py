@@ -44,6 +44,7 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "LMS_Rank",
     "SoulWars_Zeal",
     "GuardiansOfTheRift",
+    "PvPArena",
     "AbyssalSire",
     "AlchemicalHydra",
     "BarrowsChests",
