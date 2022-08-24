@@ -85,6 +85,8 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "TheatreofBlood",
     "TheatreofBlood_HardMode",
     "ThermonuclearSmokeDevil",
+    "TombsOfAmascut",
+    "TombsOfAmascutExpert",
     "TzKalZuk",
     "TzTokJad",
     "Venenatis",

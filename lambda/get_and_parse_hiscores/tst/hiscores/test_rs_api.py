@@ -116,6 +116,8 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
+        -1,-1
         34195,177
         232831,51
         """
@@ -184,6 +186,8 @@ def successful_parsed_response(player_name):
             "TheatreofBlood": {"kc": -1, "rnk": -1},
             "TheatreofBlood_HardMode": {"kc": -1, "rnk": -1},
             "ThermonuclearSmokeDevil": {"kc": -1, "rnk": -1},
+            "TombsOfAmascut": {"kc": -1, "rnk": -1},
+            "TombsOfAmascutExpert": {"kc": -1, "rnk": -1},
             "TzKalZuk": {"kc": -1, "rnk": -1},
             "TzTokJad": {"kc": -1, "rnk": -1},
             "Venenatis": {"kc": -1, "rnk": -1},
