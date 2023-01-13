@@ -76,6 +76,7 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "Nightmare",
     "PhosanisNightmare",
     "Obor",
+    "PhantomMuspah",
     "Sarachnis",
     "Scorpia",
     "Skotizo",
