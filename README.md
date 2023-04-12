@@ -24,7 +24,7 @@ You can create an instance of this service for yourself using AWS CDK. Follow th
 ## Prerequisites
 
 ### 1. Install Python
-You can find the latest release at https://www.python.org/downloads/. As of writing, we are on 3.8.10.
+You can find the latest release at https://www.python.org/downloads/. As of writing, we are on 3.8.16.
 
 ### 2. Create a free-tier AWS account
 If you don't already have one, go to https://aws.amazon.com/free and sign up.
