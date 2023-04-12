@@ -72,7 +72,9 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         238864,132
+        -1,-1
         -1,-1
         -1,-1
         -1,-1
@@ -119,6 +121,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         34195,177
         232831,51
         """
@@ -135,11 +138,13 @@ def successful_parsed_response(player_name):
         "activities": {
             "AbyssalSire": {"kc": -1, "rnk": -1},
             "AlchemicalHydra": {"kc": -1, "rnk": -1},
+            "Artio": {"kc": -1, "rnk": -1},
             "BarrowsChests": {"kc": 132, "rnk": 238864},
             "BountyHunter_Hunter": {"kc": -1, "rnk": -1},
             "BountyHunter_Rogue": {"kc": -1, "rnk": -1},
             "Bryophyta": {"kc": -1, "rnk": -1},
             "Callisto": {"kc": -1, "rnk": -1},
+            "Calvarion": {"kc": -1, "rnk": -1},
             "Cerberus": {"kc": -1, "rnk": -1},
             "ChambersofXeric": {"kc": -1, "rnk": -1},
             "ChambersofXeric_ChallengeMode": {"kc": -1, "rnk": -1},
@@ -181,6 +186,7 @@ def successful_parsed_response(player_name):
             "Sarachnis": {"kc": -1, "rnk": -1},
             "Scorpia": {"kc": -1, "rnk": -1},
             "Skotizo": {"kc": 6, "rnk": 278341},
+            "Spindel": {"kc": -1, "rnk": -1},
             "SoulWars_Zeal": {"kc": -1, "rnk": -1},
             "Tempoross": {"kc": -1, "rnk": -1},
             "TheCorruptedGauntlet": {"kc": -1, "rnk": -1},
