@@ -59,6 +59,8 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
+        -1,-1
         420501,42
         1099732,1
         643745,4
@@ -142,6 +144,8 @@ def successful_parsed_response(player_name):
             "BarrowsChests": {"kc": 132, "rnk": 238864},
             "BountyHunter_Hunter": {"kc": -1, "rnk": -1},
             "BountyHunter_Rogue": {"kc": -1, "rnk": -1},
+            "BountyHunter_Hunter_Legacy": {"kc": -1, "rnk": -1},
+            "BountyHunter_Rogue_Legacy": {"kc": -1, "rnk": -1},
             "Bryophyta": {"kc": -1, "rnk": -1},
             "Callisto": {"kc": -1, "rnk": -1},
             "Calvarion": {"kc": -1, "rnk": -1},

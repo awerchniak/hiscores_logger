@@ -34,6 +34,8 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "LeaguePoints",
     "BountyHunter_Hunter",
     "BountyHunter_Rogue",
+    "BountyHunter_Hunter_Legacy",
+    "BountyHunter_Rogue_Legacy",
     "ClueScrolls_all",
     "ClueScrolls_beginner",
     "ClueScrolls_easy",
