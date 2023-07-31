@@ -110,7 +110,7 @@ def sanitize_hiscores_stats(text: str) -> dict:
         logger.warning(
             "HiScores response contains unexpected number of lines. Have the set of "
             "skills or activities returned by the HiScores API changed recently? "
-            "Check https://runescape.wiki/w/Application_programming_interface#Old_School_Hiscores."
+            "Check https://runescape.wiki/w/Application_programming_interface#Old_School_Hiscores."  # noqa: E501
         )
 
     # skills are returned first
