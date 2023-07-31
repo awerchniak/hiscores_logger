@@ -94,6 +94,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         126798,37
         -1,-1
         -1,-1
@@ -109,6 +110,9 @@ def successful_response_text():
         -1,-1
         -1,-1
         278341,6
+        -1,-1
+        -1,-1
+        -1,-1
         -1,-1
         -1,-1
         -1,-1
@@ -168,6 +172,7 @@ def successful_parsed_response(player_name):
             "DagannothRex": {"kc": -1, "rnk": -1},
             "DagannothSupreme": {"kc": -1, "rnk": -1},
             "DerangedArchaeologist": {"kc": -1, "rnk": -1},
+            "DukeSucellus": {"kc": -1, "rnk": -1},
             "GeneralGraardor": {"kc": -1, "rnk": -1},
             "GiantMole": {"kc": -1, "rnk": -1},
             "GrotesqueGuardians": {"kc": -1, "rnk": -1},
@@ -194,6 +199,8 @@ def successful_parsed_response(player_name):
             "SoulWars_Zeal": {"kc": -1, "rnk": -1},
             "Tempoross": {"kc": -1, "rnk": -1},
             "TheCorruptedGauntlet": {"kc": -1, "rnk": -1},
+            "TheLeviathan": {"kc": -1, "rnk": -1},
+            "TheWhisperer": {"kc": -1, "rnk": -1},
             "TheGauntlet": {"kc": -1, "rnk": -1},
             "TheatreofBlood": {"kc": -1, "rnk": -1},
             "TheatreofBlood_HardMode": {"kc": -1, "rnk": -1},
@@ -202,6 +209,7 @@ def successful_parsed_response(player_name):
             "TombsOfAmascutExpert": {"kc": -1, "rnk": -1},
             "TzKalZuk": {"kc": -1, "rnk": -1},
             "TzTokJad": {"kc": -1, "rnk": -1},
+            "Vardorvis": {"kc": -1, "rnk": -1},
             "Venenatis": {"kc": -1, "rnk": -1},
             "Vettion": {"kc": -1, "rnk": -1},
             "Vorkath": {"kc": -1, "rnk": -1},
