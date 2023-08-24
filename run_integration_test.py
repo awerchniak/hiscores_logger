@@ -25,8 +25,8 @@ def main(args):
     players = trigger_response.json()
     logger.info(f"Triggered save for players {players}")
 
-    logger.info("Sleeping 5 seconds...")
-    time.sleep(5.0)
+    logger.info("Sleeping 10 seconds...")
+    time.sleep(10.0)
     after = datetime.utcnow()
 
     for player in players:
