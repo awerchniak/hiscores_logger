@@ -61,6 +61,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         420501,42
         1099732,1
         643745,4
@@ -171,6 +172,7 @@ def successful_parsed_response(player_name):
             "DagannothPrime": {"kc": -1, "rnk": -1},
             "DagannothRex": {"kc": -1, "rnk": -1},
             "DagannothSupreme": {"kc": -1, "rnk": -1},
+            "DeadmanPoints": {"kc": -1, "rnk": -1},
             "DerangedArchaeologist": {"kc": -1, "rnk": -1},
             "DukeSucellus": {"kc": -1, "rnk": -1},
             "GeneralGraardor": {"kc": -1, "rnk": -1},

@@ -32,6 +32,7 @@ HISCORES_RESPONSE_SKILLS: List[str] = [
 # https://dev.mysql.com/doc/refman/8.0/en/identifiers.html
 HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "LeaguePoints",
+    "DeadmanPoints",
     "BountyHunter_Hunter",
     "BountyHunter_Rogue",
     "BountyHunter_Hunter_Legacy",
