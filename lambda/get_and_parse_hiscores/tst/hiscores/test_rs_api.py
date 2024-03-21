@@ -76,6 +76,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         238864,132
         -1,-1
         -1,-1
@@ -111,7 +112,9 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         278341,6
+        -1,-1
         -1,-1
         -1,-1
         -1,-1
@@ -167,6 +170,7 @@ def successful_parsed_response(player_name):
             "ClueScrolls_hard": {"kc": 29, "rnk": 337647},
             "ClueScrolls_master": {"kc": -1, "rnk": -1},
             "ClueScrolls_medium": {"kc": 5, "rnk": 636404},
+            "ColosseumGlory": {"kc": -1, "rnk": -1},
             "CommanderZilyana": {"kc": -1, "rnk": -1},
             "CorporealBeast": {"kc": -1, "rnk": -1},
             "CrazyArchaeologist": {"kc": -1, "rnk": -1},
@@ -188,6 +192,7 @@ def successful_parsed_response(player_name):
             "KrilTsutsaroth": {"kc": -1, "rnk": -1},
             "LMS_Rank": {"kc": -1, "rnk": -1},
             "LeaguePoints": {"kc": -1, "rnk": -1},
+            "LunarChests": {"kc": -1, "rnk": -1},
             "Mimic": {"kc": -1, "rnk": -1},
             "Nex": {"kc": -1, "rnk": -1},
             "Nightmare": {"kc": -1, "rnk": -1},
@@ -200,6 +205,7 @@ def successful_parsed_response(player_name):
             "Scurrius": {"kc": -1, "rnk": -1},
             "Skotizo": {"kc": 6, "rnk": 278341},
             "Spindel": {"kc": -1, "rnk": -1},
+            "SolHeredit": {"kc": -1, "rnk": -1},
             "SoulWars_Zeal": {"kc": -1, "rnk": -1},
             "Tempoross": {"kc": -1, "rnk": -1},
             "TheCorruptedGauntlet": {"kc": -1, "rnk": -1},
