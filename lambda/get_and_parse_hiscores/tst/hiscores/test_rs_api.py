@@ -77,6 +77,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         238864,132
         -1,-1
         -1,-1
@@ -149,6 +150,7 @@ def successful_parsed_response(player_name):
         "activities": {
             "AbyssalSire": {"kc": -1, "rnk": -1},
             "AlchemicalHydra": {"kc": -1, "rnk": -1},
+            "Araxxor": {"kc": -1, "rnk": -1},
             "Artio": {"kc": -1, "rnk": -1},
             "BarrowsChests": {"kc": 132, "rnk": 238864},
             "BountyHunter_Hunter": {"kc": -1, "rnk": -1},

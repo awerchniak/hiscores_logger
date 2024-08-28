@@ -51,6 +51,7 @@ HISCORES_RESPONSE_ACTIVITIES: List[str] = [
     "ColosseumGlory",
     "AbyssalSire",
     "AlchemicalHydra",
+    "Araxxor",
     "Artio",
     "BarrowsChests",
     "Bryophyta",
