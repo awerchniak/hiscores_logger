@@ -78,6 +78,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         238864,132
         -1,-1
         -1,-1
@@ -134,6 +135,7 @@ def successful_response_text():
         -1,-1
         -1,-1
         -1,-1
+        -1,-1
         34195,177
         232831,51
         """
@@ -150,6 +152,7 @@ def successful_parsed_response(player_name):
         "activities": {
             "AbyssalSire": {"kc": -1, "rnk": -1},
             "AlchemicalHydra": {"kc": -1, "rnk": -1},
+            "Amoxliatl": {"kc": -1, "rnk": -1},
             "Araxxor": {"kc": -1, "rnk": -1},
             "Artio": {"kc": -1, "rnk": -1},
             "BarrowsChests": {"kc": 132, "rnk": 238864},
@@ -211,6 +214,7 @@ def successful_parsed_response(player_name):
             "SoulWars_Zeal": {"kc": -1, "rnk": -1},
             "Tempoross": {"kc": -1, "rnk": -1},
             "TheCorruptedGauntlet": {"kc": -1, "rnk": -1},
+            "TheHueycoatl": {"kc": -1, "rnk": -1},
             "TheLeviathan": {"kc": -1, "rnk": -1},
             "TheWhisperer": {"kc": -1, "rnk": -1},
             "TheGauntlet": {"kc": -1, "rnk": -1},
