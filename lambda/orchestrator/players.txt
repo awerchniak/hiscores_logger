@@ -7,4 +7,4 @@ GI Pliny
 Dr Moon Law
 TealBingo
 GI Jobra
-sstate
+state 0
